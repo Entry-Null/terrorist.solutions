@@ -23,7 +23,7 @@ local coreFunctions = {
         themP = themH.RootPart.CFrame
         youH = you.Humanoid
         youH.Sit = true
-        while Toggles.sexing.Value == true do
+        while true do
             wait()
             you.HumanoidRootPart.CFrame = them.HumanoidRootPart.CFrame * CFrame.fromEulerAnglesYXZ (math.rad(-90), math.rad(360), math.rad(0))  + them.HumanoidRootPart.CFrame.LookVector * math.random(1,3) - them.HumanoidRootPart.CFrame.UpVector
         end
