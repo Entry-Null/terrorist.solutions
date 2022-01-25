@@ -188,7 +188,7 @@ if not syn or not protectgui then
     local CreditTabBox = CreditTab:AddLeftTabbox("Credits")
     local Credits = CreditTabBox:AddTab("Credits")
     
-    Credits:AddLabel("Made by coded by plotting#2399")
+    Credits:AddLabel("plotting#2399")
     Credits:AddButton("Join Discord", function()
         local http = game:GetService('HttpService') 	
         local req = syn and syn.request or http and http.request or http_request or fluxus and fluxus.request or getgenv().request or request
