@@ -349,7 +349,7 @@ Main:AddSlider("Transparency", {Text = "Transparency", Min = 0, Max = 1, Default
     fov_circle.Transparency = Options.Transparency.Value
 end)
 
-Main:AddToggle("Visible", {Text = "Visible", Default = config['SilenAimFOVVis'] or true}):AddColorPicker("Color", {Default = Color3.fromRGB(54, 57, 241)}):OnChanged(function()
+Main:AddToggle("Visible", {Text = "Visible", Default = config['SilentAimFOVVis'] or true}):AddColorPicker("Color", {Default = Color3.fromRGB(54, 57, 241)}):OnChanged(function()
 fov_circle.Visible = Toggles.Visible.Value
 while Toggles.Visible.Value do
     fov_circle.Visible = Toggles.Visible.Value
