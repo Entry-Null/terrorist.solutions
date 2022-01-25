@@ -3,14 +3,45 @@ getgenv().protectgui = function()end
 else
     game.Players.LocalPlayer:Kick("There was one child with down's syndrome, there is now none")
 end
-
+local http = game:GetService('HttpService')
 local Library = loadstring(game:HttpGet('https://raw.githubusercontent.com/Entry-Null/UI/main/Meth.lua'))()
 local ESP = loadstring(game:HttpGet('https://raw.githubusercontent.com/Entry-Null/ESP/main/Terrorism.lua'))()
 Library.AccentColor = Color3.fromRGB(222, 37, 0)
 Library.OutlineColor = Color3.fromRGB(10, 10, 10)
 Library.MainColor = Color3.fromRGB(18, 18, 18)
 Library.FontColor = Color3.fromRGB(217, 210, 210)
-Library:Notify("What starts with N and ends with R and will most likely steal your car? Clocks ticking.", 20)
+
+local config = {}
+
+if isfolder("terrorist Config") then
+    local configC = http:JSONDecode(readfile("terrorist Config/config.ts"))
+
+    config = {
+        SilentAimFOVRad = configC["SilentAimFOVRad"] or 180,
+        Streamer = configC['Streamer'] or false,
+        SilentAimEnabled = configC['SilentAimEnabled'] or false,
+        SilentAimFOVVis = configC['SilentAimFOVVis'] or true,
+        SilentAimFOVEnabled = configC['SilentAimFOVEnabled'] or false
+    }
+    if configC['Streamer'] ~= true then
+        Library:Notify("There are several explosives lining the walls of the interior of my home!", 20)
+    end
+else
+    config = {
+        SilentAimFOVRad = 180,
+        Streamer = false,
+        SilentAimEnabled = false,
+        SilentAimFOVVis = true,
+        SilentAimFOVEnabled = false
+    }
+
+    makefolder("terrorist Config")
+    writefile("terrorist Config/config.ts", http:JSONEncode(config))
+
+    Library:Notify("New config detected (workspace/terrorist Config/config.ts).", 20)
+end
+
+
 _G.Raping = true
 local int = coroutine.resume
 local cre = coroutine.create
@@ -305,8 +336,8 @@ fov_circle.Transparency = 1
 fov_circle.Color = Color3.fromRGB(54, 57, 241)
 
 local Main = FieldOfViewBOX:AddTab("Field Of View")
-Main:AddToggle("fov_Enabled", {Text = "Enabled"})
-Main:AddSlider("Radius", {Text = "Radius", Min = 0, Max = 360, Default = 180, Rounding = 0}):OnChanged(function()
+Main:AddToggle("fov_Enabled", {Text = "Enabled", Default = config['SilentAimFOVEnabled'] or false})
+Main:AddSlider("Radius", {Text = "Radius", Min = 0, Max = 360, Default = config["SilentAimFOVRad"] or 180, Rounding = 0}):OnChanged(function()
 fov_circle.Radius = Options.Radius.Value
 end)
 
@@ -318,7 +349,7 @@ Main:AddSlider("Transparency", {Text = "Transparency", Min = 0, Max = 1, Default
     fov_circle.Transparency = Options.Transparency.Value
 end)
 
-Main:AddToggle("Visible", {Text = "Visible"}):AddColorPicker("Color", {Default = Color3.fromRGB(54, 57, 241)}):OnChanged(function()
+Main:AddToggle("Visible", {Text = "Visible", Default = config['SilenAimFOVVis'] or true}):AddColorPicker("Color", {Default = Color3.fromRGB(54, 57, 241)}):OnChanged(function()
 fov_circle.Visible = Toggles.Visible.Value
 while Toggles.Visible.Value do
     fov_circle.Visible = Toggles.Visible.Value
