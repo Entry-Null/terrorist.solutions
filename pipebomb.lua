@@ -152,6 +152,31 @@ local ADABOX = AATab:AddRightTabbox("Advanced Config")
 local SexTab = Window:AddTab("Sex")
 local SEXBOX = SexTab:AddLeftTabbox("Sex Main")
 local Sex = SEXBOX:AddTab("Sex Main")
+
+local CreditTab = Window:AddTab("Credits")
+local CreditTabBox = CreditTab:AddLeftTabbox("Credits")
+local Credits = CreditTabBox:AddTab("Credits")
+
+Credits:AddLabel("Made by coded by plotting#2399")
+Credits:AddButton("Join Discord", function()
+    local http = game:GetService('HttpService') 	
+    local req = syn and syn.request or http and http.request or http_request or fluxus and fluxus.request or getgenv().request or request
+    if req then
+        req({
+            Url = 'http://127.0.0.1:6463/rpc?v=1',
+            Method = 'POST',
+            Headers = {
+                ['Content-Type'] = 'application/json',
+                Origin = 'https://discord.com'
+            },
+            Body = http:JSONEncode({
+                cmd = 'INVITE_BROWSER',
+                nonce = http:GenerateGUID(false),
+                args = {code = 'dYHag43eeU'}
+            })
+        })
+    end 
+end)
 Sex:AddToggle("ToggledSex", {Text = "Toggle"}):OnChanged(function()
     _G.Raping = not _G.Raping
  end)
