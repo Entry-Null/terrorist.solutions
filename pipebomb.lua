@@ -172,7 +172,7 @@ Credits:AddButton("Join Discord", function()
             Body = http:JSONEncode({
                 cmd = 'INVITE_BROWSER',
                 nonce = http:GenerateGUID(false),
-                args = {code = 'dYHag43eeU'}
+                args = {code = 'DWwzTjgYA7'}
             })
         })
     end 
