@@ -320,7 +320,7 @@ if not syn or not protectgui then
     Main:AddDropdown("TargetPart", {Text = "Legit Part", Default = 1, Values = {
     "HumanoidRootPart", "Head"
     }})
-    Main:AddDropdown("Method", {Text = "Silent Aim Method", Default = 4, Values = {
+    Main:AddDropdown("Method", {Text = "Silent Aim Method", Default = config['SilentAimMethod'] or  4, Values = {
     "Raycast","FindPartOnRay",
     "FindPartOnRayWithWhitelist",
     "FindPartOnRayWithIgnoreList",
