@@ -21,18 +21,25 @@ if not syn or not protectgui then
             Streamer = configC['Streamer'] or false,
             SilentAimEnabled = configC['SilentAimEnabled'] or false,
             SilentAimFOVVis = configC['SilentAimFOVVis'] or false,
-            SilentAimFOVEnabled = configC['SilentAimFOVEnabled'] or false
+            SilentAimFOVEnabled = configC['SilentAimFOVEnabled'] or false,
+            SilentAimMethod = configC['SilentAimMethod'] or 4,
+            message = configC['message'] or "There are several explosives lining the walls of the interior of my home!",
+            messageduration = configC['messageduration'] or 20
         }
         if configC['Streamer'] ~= true then
-            Library:Notify("There are several explosives lining the walls of the interior of my home!", 20)
+            Library:Notify(config['message'] or "There are several explosives lining the walls of the interior of my home!", config['messageduration'] or 20)
         end
+        writefile("terrorist Config/config.ts", http:JSONEncode(config))
     else
         config = {
             SilentAimFOVRad = 180,
             Streamer = false,
             SilentAimEnabled = false,
             SilentAimFOVVis = false,
-            SilentAimFOVEnabled = false
+            SilentAimFOVEnabled = false,
+            SilentAimMethod = 4,
+            message = "There are several explosives lining the walls of the interior of my home!",
+            messageduration = 20
         }
     
         makefolder("terrorist Config")
