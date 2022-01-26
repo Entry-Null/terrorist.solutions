@@ -24,7 +24,8 @@ if not syn or not protectgui then
             SilentAimFOVEnabled = configC['SilentAimFOVEnabled'] or false,
             SilentAimMethod = configC['SilentAimMethod'] or 4,
             message = configC['message'] or "There are several explosives lining the walls of the interior of my home!",
-            messageduration = configC['messageduration'] or 20
+            messageduration = configC['messageduration'] or 20,
+            Aimhitpart = configC['Aimhitpart'] or 2
         }
         if configC['Streamer'] ~= true then
             Library:Notify(config['message'] or "There are several explosives lining the walls of the interior of my home!", config['messageduration'] or 20)
@@ -39,7 +40,8 @@ if not syn or not protectgui then
             SilentAimFOVEnabled = false,
             SilentAimMethod = 4,
             message = "There are several explosives lining the walls of the interior of my home!",
-            messageduration = 20
+            messageduration = 20,
+            Aimhitpart = 2
         }
     
         makefolder("terrorist Config")
@@ -317,7 +319,7 @@ if not syn or not protectgui then
     MainChecks:AddInput("teamCheckID", {Text = "Whitelist Team", Default = "Team name"})
     
     
-    Main:AddDropdown("TargetPart", {Text = "Legit Part", Default = 1, Values = {
+    Main:AddDropdown("TargetPart", {Text = "Legit Part", Default = config['Aimhitpart'] or 1, Values = {
     "HumanoidRootPart", "Head"
     }})
     Main:AddDropdown("Method", {Text = "Silent Aim Method", Default = config['SilentAimMethod'] or  4, Values = {
