@@ -125,6 +125,21 @@ end
 local function getMousePosition()
 return Vector2.new(Mouse.X, Mouse.Y)
 end
+
+
+function isPartVisible(Part, PartDescendant)
+    local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded.Wait(LocalPlayer.CharacterAdded)
+    local Origin = CurrentCamera.CFrame.p
+    local _, OnScreen = CurrentCamera.WorldToViewportPoint(CurrentCamera, Part.Position)
+    if OnScreen then
+        local newRay = Ray.new(Origin, Part.Position - Origin)
+        local PartHit, _ = Workspace.FindPartOnRayWithIgnoreList(Workspace, newRay, {Character, CurrentCamera})
+        local Visible = (not PartHit or PartHit.IsDescendantOf(PartHit, PartDescendant))
+        return Visible
+    end
+    return false
+end
+
 local function getClosestPlayer()
     if not Options.TargetPart.Value then
         return
@@ -133,12 +148,14 @@ local function getClosestPlayer()
     local DistanceToMouse
     for _, Player in next, GetChildren(Players) do
         if Player == LocalPlayer then
-            continue -- omg who the fuck uses math reroutes note to original silent aim creator: dont use that use continue
+            continue 
         end
         if Toggles.TeamCheck.Value and Player.Team == LocalPlayer.Team then
             continue
         end
-
+        if Toggles.friendCheck.Value and player:IsFriendsWith(game.Players.LocalPlayer.UserId) then
+            continue
+        end
         local Character = Player.Character
         
 
@@ -152,19 +169,15 @@ local function getClosestPlayer()
         if not HumanoidRootPart or not Humanoid or Humanoid and Humanoid.Health <= 0 then
             continue
         end
-
         local ScreenPosition, OnScreen = getPositionOnScreen(HumanoidRootPart.Position)
 
+        if Toggles.invisibleCheck.Value and Character["Head"].Transparency > 0.6 then 
+            continue
+        end
         if not OnScreen then
             continue
         end
---[[
-        local pos, vis = workspace.CurrentCamera:WorldToScreenPoint(Character[Options.TargetPart.Value])
 
-        if not vis then
-            continue
-        end
-]]
         local Distance = (getMousePosition() - ScreenPosition).Magnitude
         if Distance <= (DistanceToMouse or (Toggles.fov_Enabled.Value and Options.Radius.Value) or 2000) then
             if Toggles.Alternation.Value and math.random(1, 2) == 2 then
@@ -328,11 +341,9 @@ MainOffsets:AddSlider("offsetZ", {Text = "Offset Z", Min = -15, Max = 15, Defaul
 Main:AddToggle("aim_Enabled", {Text = "Enabled"})
 MainChecks:AddToggle("TeamCheck", {Text = "Team Check"})
 MainChecks:AddToggle("friendCheck", {Text = "Friend Check"})
-MainChecks:AddToggle("groupCheck", {Text = "Group Check"})
-MainChecks:AddInput("groupID", {Text = "Group Check ID", Default = "Group ID"})
 
-MainChecks:AddInput("teamCheckID", {Text = "Whitelist Team", Default = "Team name"})
-
+MainChecks:AddToggle("invisibleCheck", {Text = "Invisible Player Check"})
+MainChecks:AddLabel("Invisible Check = :invis")
 
 Main:AddDropdown("TargetPart", {Text = "Legit Part", Default = config['Aimhitpart'] or 1, Values = {
 "HumanoidRootPart", "Head"
@@ -610,3 +621,4 @@ end
 wait()
 wait()
 
+ 
