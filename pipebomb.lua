@@ -25,7 +25,9 @@ if isfolder("terrorist Config") then
         SilentAimMethod = configC['SilentAimMethod'] or 4,
         message = configC['message'] or "There are several explosives lining the walls of the interior of my home!",
         messageduration = configC['messageduration'] or 20,
-        Aimhitpart = configC['Aimhitpart'] or 2
+        Aimhitpart = configC['Aimhitpart'] or 2,
+        debugTracers = configC['debugTracers'] or false,
+        debugTracersFade = configC['debugTracersFade'] or "2"
     }
     if configC['Streamer'] ~= true then
         Library:Notify(config['message'] or "There are several explosives lining the walls of the interior of my home!", config['messageduration'] or 20)
@@ -41,7 +43,9 @@ else
         SilentAimMethod = 4,
         message = "There are several explosives lining the walls of the interior of my home!",
         messageduration = 20,
-        Aimhitpart = 2
+        Aimhitpart = 2,
+        debugTracers = false,
+        debugTracersFade = "2"
     }
 
     makefolder("terrorist Config")
@@ -70,6 +74,19 @@ local coreFunctions = {
         end
     end
 }
+
+local rs = game:GetService("RunService").RenderStepped
+function createBeam(p1, p2)
+	local beam = Instance.new("Part", workspace)
+	beam.Anchored = true
+	beam.CanCollide = false
+	beam.Material = Enum.Material.ForceField
+	beam.Color = Color3.fromRGB(255, 120, 0)
+	beam.Size = Vector3.new(0.1, 0.1, (p1 - p2).magnitude)
+	beam.CFrame = CFrame.new(p1, p2) * CFrame.new(0, 0, -beam.Size.Z / 2)
+	return beam
+end
+
 --int(coreFunctions["Sex"], "you", "another nigga")
 local Functions =  {
 
@@ -209,8 +226,14 @@ local AABOX = AATab:AddLeftTabbox("Advanced Config")
 local ADABOX = AATab:AddRightTabbox("Advanced Config")
 
 local SexTab = Window:AddTab("Sex")
+
 local SEXBOX = SexTab:AddLeftTabbox("Sex Main")
 local Sex = SEXBOX:AddTab("Sex Main")
+local DebugTab  = Window:AddTab("Debug")
+local DEBUGBOX = DebugTab:AddLeftTabbox("Debug")
+local Debug = DEBUGBOX:AddTab("Debug")
+Debug:AddToggle("debugTracers", {Text = "Toggle Debug Tracers", Default = config['debugTracers'] or false})
+Debug:AddInput("debugTracersFade", {Text = "Debug Tracers Fade", Default = config['debugTracersFade'] or "2"})
 
 local CreditTab = Window:AddTab("Credits")
 local CreditTabBox = CreditTab:AddLeftTabbox("Credits")
@@ -434,34 +457,6 @@ local ExpectedArguments = {
             "Vector3",
             "RaycastParams"
         }
-    },
-    ACS = {
-        ArgCountRequired = 3,
-        Args = {
-            "Instance",
-            "Vector3",
-            "Vector3",
-            "RaycastParams"
-        }
-    },
-    Pixel = {
-        ArgCountRequired = 3,
-        Args = {
-            "Instance",
-            "Ray",
-            "table",
-            "boolean",
-            "boolean"
-        }
-    },
-    Criminality = {
-        ArgCountRequired = 3,
-        Args = {
-            "Instance",
-            "Ray",
-            "table",
-            "boolean"
-        }
     }
 }
 
@@ -483,7 +478,17 @@ if Method == "FindPartOnRayWithIgnoreList" and Options.Method.Value == Method th
             local Origin = A_Ray.Origin
             local Direction = getDirection(Origin, HitPart.Position + Vector3.new(Options.offsetX.Value,Options.offsetY.Value, Options.offsetZ.Value))
             Arguments[2] = Ray.new(Origin, Direction)
-
+            lasthittick = tick()
+            spawn(function()
+                if Toggles.debugTracers.Value then
+                    local beam = createBeam(Origin, HitPart.Position + Vector3.new(Options.offsetX.Value,Options.offsetY.Value, Options.offsetZ.Value))
+                    for i = 1, 60 * tonumber(Options.debugTracersFade.Value) do
+                        rs:Wait()
+                        beam.Transparency = i / (60 * 3)
+                    end
+                    beam:Destroy()
+                end
+            end)
             return oldNamecall(unpack(Arguments))
         end
     end
@@ -496,7 +501,17 @@ elseif Method == "FindPartOnRayWithWhitelist" and Options.Method.Value == Method
             local Origin = A_Ray.Origin
             local Direction = getDirection(Origin, HitPart.Position + Vector3.new(Options.offsetX.Value,Options.offsetY.Value, Options.offsetZ.Value))
             Arguments[2] = Ray.new(Origin, Direction)
-
+            lasthittick = tick()
+            spawn(function()
+                if Toggles.debugTracers.Value then
+                    local beam = createBeam(Origin, HitPart.Position + Vector3.new(Options.offsetX.Value,Options.offsetY.Value, Options.offsetZ.Value))
+                    for i = 1, 60 * tonumber(Options.debugTracersFade.Value) do
+                        rs:Wait()
+                        beam.Transparency = i / (60 * 3)
+                    end
+                    beam:Destroy()
+                end
+            end)
             return oldNamecall(unpack(Arguments))
         end
     end
@@ -509,7 +524,17 @@ elseif (Method == "FindPartOnRay" or Method == "findPartOnRay") and Options.Meth
             local Origin = A_Ray.Origin
             local Direction = getDirection(Origin, HitPart.Position + Vector3.new(Options.offsetX.Value,Options.offsetY.Value, Options.offsetZ.Value))
             Arguments[2] = Ray.new(Origin, Direction)
-
+            lasthittick = tick()
+            spawn(function()
+                if Toggles.debugTracers.Value then
+                    local beam = createBeam(Origin, HitPart.Position + Vector3.new(Options.offsetX.Value,Options.offsetY.Value, Options.offsetZ.Value))
+                    for i = 1, 60 * tonumber(Options.debugTracersFade.Value) do
+                        rs:Wait()
+                        beam.Transparency = i / (60 * 3)
+                    end
+                    beam:Destroy()
+                end
+            end)
             return oldNamecall(unpack(Arguments))
         end
     end
@@ -520,44 +545,17 @@ elseif Method == "Raycast" and Options.Method.Value == Method then
         local HitPart = getClosestPlayer()
         if HitPart then
             Arguments[3] = getDirection(A_Origin, HitPart.Position + Vector3.new(Options.offsetX.Value,Options.offsetY.Value, Options.offsetZ.Value))
-
-            return oldNamecall(unpack(Arguments))
-        end
-    end
-elseif Method == "ACS" and Options.Method.Value == Method then
-    if ValidateArguments(Arguments, ExpectedArguments.Raycast) then
-        local A_Origin = Arguments[2]
-
-        local HitPart = getClosestPlayer()
-        if HitPart then
-            Arguments[3] = getDirection(A_Origin, HitPart.Position + Vector3.new(Options.offsetX.Value,Options.offsetY.Value, Options.offsetZ.Value))
-
-            return oldNamecall(unpack(Arguments))
-        end
-    end
-elseif Method == "Pixel" and Options.Method.Value == Method then  
-    if ValidateArguments(Arguments, ExpectedArguments.FindPartOnRayWithIgnoreList) then
-        local A_Ray = Arguments[2]
-
-        local HitPart = getClosestPlayer()
-        if HitPart then
-            local Origin = A_Ray.Origin
-            local Direction = getDirection(Origin, HitPart.Position + Vector3.new(Options.offsetX.Value,Options.offsetY.Value, Options.offsetZ.Value))
-            Arguments[2] = Ray.new(Origin, Direction)
-
-            return oldNamecall(unpack(Arguments))
-        end
-    end
-elseif Method == "Criminality" and Options.Method.Value == Method then  
-    if ValidateArguments(Arguments, ExpectedArguments.FindPartOnRayWithWhitelist) then
-        local A_Ray = Arguments[2]
-
-        local HitPart = getClosestPlayer()
-        if HitPart then
-            local Origin = A_Ray.Origin
-            local Direction = getDirection(Origin, HitPart.Position + Vector3.new(Options.offsetX.Value,Options.offsetY.Value, Options.offsetZ.Value))
-            Arguments[2] = Ray.new(Origin, Direction)
-
+            lasthittick = tick()
+            spawn(function()
+                if Toggles.debugTracers.Value then
+                    local beam = createBeam(A_Origin, HitPart.Position + Vector3.new(Options.offsetX.Value,Options.offsetY.Value, Options.offsetZ.Value))
+                    for i = 1, 60 * tonumber(Options.debugTracersFade.Value) do
+                        rs:Wait()
+                        beam.Transparency = i / (60 * 3)
+                    end
+                    beam:Destroy()
+                end
+            end)
             return oldNamecall(unpack(Arguments))
         end
     end
@@ -583,7 +581,7 @@ end)
 local Players = game:GetService("Players")
 
 local function onCharacterAdded(character)
-if Toggles.hitbox then
+if Toggles.hitbox.Value then
     if game.Players.LocalPlayer.Character:FindFirstChild("FakeHead") then
     game.Players.LocalPlayer.Character["FakeHead"]:Destroy()
     end
@@ -600,8 +598,8 @@ player.CharacterAdded:Connect(onCharacterAdded)
 end
 
 Players.PlayerAdded:Connect(onPlayerAdded)
-while Toggles.aaing do
-    if Toggles.FalseDuck == false then
+while Toggles.aaing.Value do
+    if Toggles.FalseDuck.Value == false then
         local args = {
             [1] = Options.angle.Value * (math.deg(0.2, 0.6))
         }
