@@ -10,6 +10,7 @@ Library.AccentColor = Color3.fromRGB(222, 37, 0)
 Library.OutlineColor = Color3.fromRGB(10, 10, 10)
 Library.MainColor = Color3.fromRGB(18, 18, 18)
 Library.FontColor = Color3.fromRGB(217, 210, 210)
+local CurrentCamera = workspace.CurrentCamera
 
 local config = {}
 
@@ -54,6 +55,28 @@ else
     Library:Notify("New config detected (workspace/terrorist Config/config.ts).", 20)
 end
     
+
+function GetVisible(Part, PartDescendant)
+    local Character = LocalPlayer.Character or CharacterAddedWait(CharacterAdded)
+    local Origin = CurrentCamera.CFrame.Position
+    local _, OnScreen = WorldToViewportPoint(CurrentCamera, Part.Position)
+    if (OnScreen) then
+        local raycastParams = RaycastParamsnew()
+        raycastParams.FilterType = EnumRaycastFilterTypeBlacklist
+        raycastParams.FilterDescendantsInstances = ({Character, CurrentCamera})
+
+        local Result = Raycast(Workspace, Origin, Part.Position - Origin, raycastParams)
+
+        if (Result) then
+            local PartHit = Result.Instance
+            local Visible = (not PartHit or IsDescendantOf(PartHit, PartDescendant))
+
+            return Visible
+        end
+    end
+
+    return false
+end
 
 _G.Raping = true
 local int = coroutine.resume
@@ -175,6 +198,9 @@ local function getClosestPlayer()
         end
         local Character = Player.Character
         
+        if Toggles.VisCheck.Value and not isPartVisible(Character[Options.TargetPart.Value], Character) then
+            continue
+        end
 
         if not Character then
             continue
@@ -362,6 +388,7 @@ MainOffsets:AddSlider("offsetZ", {Text = "Offset Z", Min = -15, Max = 15, Defaul
 
 
 Main:AddToggle("aim_Enabled", {Text = "Enabled"})
+MainChecks:AddToggle("VisCheck", {Text = "Visible Check"})
 MainChecks:AddToggle("TeamCheck", {Text = "Team Check"})
 MainChecks:AddToggle("friendCheck", {Text = "Friend Check"})
 
@@ -617,3 +644,4 @@ wait()
 wait()
 
  
+
