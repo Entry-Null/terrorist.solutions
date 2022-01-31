@@ -249,6 +249,9 @@ local Sex = SEXBOX:AddTab("Sex Main")
 local DebugTab  = Window:AddTab("Debug")
 local DEBUGBOX = DebugTab:AddLeftTabbox("Debug")
 local Debug = DEBUGBOX:AddTab("Debug")
+local FOVFuncional = DEBUGBOX:AddTab("FOV")
+FOVFuncional:AddToggle("TriggerFOV", {Text = "Toggle Trigger Bot", Default = config['triggerBot'] or false})
+
 Debug:AddToggle("debugTracers", {Text = "Toggle Debug Tracers", Default = config['debugTracers'] or false})
 Debug:AddInput("debugTracersFade", {Text = "Debug Tracers Fade", Default = config['debugTracersFade'] or "2"})
 
@@ -371,7 +374,6 @@ local MainChecks = MainBOX2:AddTab("Checks")
 local MainOffsets = MainBOX2:AddTab("Offsets")
 
 MainOffsets:AddToggle("Alternation", {Text = "Hitpart Alternation"})
-MainOffsets:AddToggle("TriggerFOV", {Text = "Toggle Trigger Bot", Default = config['triggerBot'] or false})
 
 MainOffsets:AddSlider("offsetX", {Text = "Offset X", Min = -15, Max = 15 , Default = 0, Rounding = 1})
 MainOffsets:AddSlider("offsetY", {Text = "Offset Y", Min = -15, Max = 15, Default = 0, Rounding = 1})
