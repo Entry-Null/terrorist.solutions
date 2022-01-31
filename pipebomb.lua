@@ -523,12 +523,12 @@ elseif Method == "FindPartOnRayWithWhitelist" and Options.Method.Value == Method
         local HitPart = getClosestPlayer()
         if HitPart then
             local Origin = A_Ray.Origin
-            local Direction = getDirection(Origin, HitPart.Position + Vector3.new(Options.offsetX.Value,Options.offsetY.Value, Options.offsetZ.Value))
+            local Direction = getDirection(Origin, HitPart.Position + Vector3.new(math.random(-.2, .3) + Options.offsetX.Value,math.random(-.2, .2) + Options.offsetY.Value, Options.offsetZ.Value))
             Arguments[2] = Ray.new(Origin, Direction)
             lasthittick = tick()
             spawn(function()
                 if Toggles.debugTracers.Value then
-                    local beam = createBeam(Origin, HitPart.Position + Vector3.new(Options.offsetX.Value,Options.offsetY.Value, Options.offsetZ.Value))
+                    local beam = createBeam(Origin, HitPart.Position + Vector3.new(math.random(-.2, .3) + Options.offsetX.Value,math.random(-.2, .2) + Options.offsetY.Value, Options.offsetZ.Value))
                     for i = 1, 60 * tonumber(Options.debugTracersFade.Value) do
                         rs:Wait()
                         beam.Transparency = i / (60 * 3)
@@ -546,12 +546,12 @@ elseif (Method == "FindPartOnRay" or Method == "findPartOnRay") and Options.Meth
         local HitPart = getClosestPlayer()
         if HitPart then
             local Origin = A_Ray.Origin
-            local Direction = getDirection(Origin, HitPart.Position + Vector3.new(Options.offsetX.Value,Options.offsetY.Value, Options.offsetZ.Value))
+            local Direction = getDirection(Origin, HitPart.Position + Vector3.new(math.random(-.2, .3) + Options.offsetX.Value,math.random(-.2, .2) + Options.offsetY.Value, Options.offsetZ.Value))
             Arguments[2] = Ray.new(Origin, Direction)
             lasthittick = tick()
             spawn(function()
                 if Toggles.debugTracers.Value then
-                    local beam = createBeam(Origin, HitPart.Position + Vector3.new(Options.offsetX.Value,Options.offsetY.Value, Options.offsetZ.Value))
+                    local beam = createBeam(Origin, HitPart.Position + Vector3.new(math.random(-.2, .3) + Options.offsetX.Value,math.random(-.2, .2) + Options.offsetY.Value, Options.offsetZ.Value))
                     for i = 1, 60 * tonumber(Options.debugTracersFade.Value) do
                         rs:Wait()
                         beam.Transparency = i / (60 * 3)
@@ -568,11 +568,11 @@ elseif Method == "Raycast" and Options.Method.Value == Method then
 
         local HitPart = getClosestPlayer()
         if HitPart then
-            Arguments[3] = getDirection(A_Origin, HitPart.Position + Vector3.new(Options.offsetX.Value,Options.offsetY.Value, Options.offsetZ.Value))
+            Arguments[3] = getDirection(A_Origin, HitPart.Position + Vector3.new(math.random(-.2, .3) + Options.offsetX.Value,math.random(-.2, .2) + Options.offsetY.Value, Options.offsetZ.Value))
             lasthittick = tick()
             spawn(function()
                 if Toggles.debugTracers.Value then
-                    local beam = createBeam(A_Origin, HitPart.Position + Vector3.new(Options.offsetX.Value,Options.offsetY.Value, Options.offsetZ.Value))
+                    local beam = createBeam(A_Origin, HitPart.Position + Vector3.new(math.random(-.2, .3) + Options.offsetX.Value,math.random(-.2, .2) + Options.offsetY.Value, Options.offsetZ.Value))
                     for i = 1, 60 * tonumber(Options.debugTracersFade.Value) do
                         rs:Wait()
                         beam.Transparency = i / (60 * 3)
