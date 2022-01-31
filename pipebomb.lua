@@ -378,7 +378,7 @@ MainOffsets:AddSlider("offsetY", {Text = "Offset Y", Min = -15, Max = 15, Defaul
 MainOffsets:AddSlider("offsetZ", {Text = "Offset Z", Min = -15, Max = 15, Default = 0, Rounding = 1})
 
 
-Main:AddToggle("aim_Enabled", {Text = "Enabled"})
+Main:AddToggle("aim_Enabled", {Text = "Enabled", config['SilentAimEnabled'] or false})
 MainChecks:AddToggle("VisCheck", {Text = "Visible Check"})
 MainChecks:AddToggle("TeamCheck", {Text = "Team Check"})
 MainChecks:AddToggle("friendCheck", {Text = "Friend Check"})
