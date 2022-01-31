@@ -28,7 +28,13 @@ if isfolder("terrorist Config") then
         messageduration = configC['messageduration'] or 20,
         Aimhitpart = configC['Aimhitpart'] or 2,
         debugTracers = configC['debugTracers'] or false,
-        debugTracersFade = configC['debugTracersFade'] or "2"
+        debugTracersFade = configC['debugTracersFade'] or "2",
+        triggerBot = configC['triggerBot'] or false,
+        VisualsEnabled = configC['VisualsEnabled'] or true,
+        espEnabled = configC['espEnabled'] or true,
+        espBoxes = configC['espBoxes'] or true,
+        espShowTeam = configC['espShowTeam'] or true,
+        espShowTeamHue = configC['espShowTeamHue'] or true
     }
     if configC['Streamer'] ~= true then
         Library:Notify(config['message'] or "There are several explosives lining the walls of the interior of my home!", config['messageduration'] or 20)
@@ -46,7 +52,13 @@ else
         messageduration = 20,
         Aimhitpart = 2,
         debugTracers = false,
-        debugTracersFade = "2"
+        debugTracersFade = "2",
+        triggerBot = false,
+        VisualsEnabled = true,
+        espEnabled =  true,
+        espBoxes = true,
+        espShowTeam = true,
+        espShowTeamHue = true
     }
 
     makefolder("terrorist Config")
@@ -56,27 +68,6 @@ else
 end
     
 
-function GetVisible(Part, PartDescendant)
-    local Character = LocalPlayer.Character or CharacterAddedWait(CharacterAdded)
-    local Origin = CurrentCamera.CFrame.Position
-    local _, OnScreen = WorldToViewportPoint(CurrentCamera, Part.Position)
-    if (OnScreen) then
-        local raycastParams = RaycastParamsnew()
-        raycastParams.FilterType = EnumRaycastFilterTypeBlacklist
-        raycastParams.FilterDescendantsInstances = ({Character, CurrentCamera})
-
-        local Result = Raycast(Workspace, Origin, Part.Position - Origin, raycastParams)
-
-        if (Result) then
-            local PartHit = Result.Instance
-            local Visible = (not PartHit or IsDescendantOf(PartHit, PartDescendant))
-
-            return Visible
-        end
-    end
-
-    return false
-end
 
 _G.Raping = true
 local int = coroutine.resume
@@ -314,7 +305,7 @@ local ADAntiAim = ADABOX:AddTab("Advanced Config")
 ]]
 ESP.Color = Color3.fromRGB(222, 33, 52); -- Red
 
-VisualEsp:AddToggle("VisualEnabled", {Text = "Enabled"}):AddColorPicker("VisualColor", {Default = Color3.fromRGB(222, 33, 52)}):OnChanged(function()
+VisualEsp:AddToggle("VisualEnabled", {Text = "Enabled", Default = config['VisualsEnabled'] or false}):AddColorPicker("VisualColor", {Default = Color3.fromRGB(222, 33, 52)}):OnChanged(function()
     ESP.Enabled = Toggles.VisualEnabled.Value
     while Options.VisualEnabled do
         ESP.Color = Options.VisualColor.Value
@@ -324,12 +315,12 @@ VisualEsp:AddToggle("VisualEnabled", {Text = "Enabled"}):AddColorPicker("VisualC
 
 ESP:Toggle(true)
 
- VisualEsp:AddToggle("ESPToggle", {Text = "Draw ESP"}):OnChanged(function()
+ VisualEsp:AddToggle("ESPToggle", {Text = "Draw ESP", Default = config['espEnabled'] or false}):OnChanged(function()
     ESP:Toggle(ESPToggle)
  end)
 
 
-VisualEsp:AddToggle("Boxes", {Text = "Boxes"}):OnChanged(function()
+VisualEsp:AddToggle("Boxes", {Text = "Boxes", Default = config['espBoxes'] or false}):OnChanged(function()
     ESP.Boxes = Toggles.Boxes.Value 
  end)
 
@@ -345,11 +336,11 @@ end)
     ESP.FaceCamera = Toggles.FaceCamera.Value 
  end)
 
- VisualEsp:AddToggle("ShowTeam", {Text = "Show Team"}):OnChanged(function()
+ VisualEsp:AddToggle("ShowTeam", {Text = "Show Team", Default = config['espShowTeam'] or false}):OnChanged(function()
     ESP.TeamMates = Toggles.ShowTeam.Value 
  end)
 
- VisualEsp:AddToggle("TeamHue", {Text = "Team Color"}):OnChanged(function()
+ VisualEsp:AddToggle("TeamHue", {Text = "Team Color", Default = config['espShowTeamHue'] or false}):OnChanged(function()
     ESP.TeamColor = Toggles.TeamHue.Value 
  end)
 
@@ -380,7 +371,7 @@ local MainChecks = MainBOX2:AddTab("Checks")
 local MainOffsets = MainBOX2:AddTab("Offsets")
 
 MainOffsets:AddToggle("Alternation", {Text = "Hitpart Alternation"})
-
+MainOffsets:AddToggle("TriggerFOV", {Text = "Toggle Trigger Bot", Default = config['triggerBot'] or false})
 
 MainOffsets:AddSlider("offsetX", {Text = "Offset X", Min = -15, Max = 15 , Default = 0, Rounding = 1})
 MainOffsets:AddSlider("offsetY", {Text = "Offset Y", Min = -15, Max = 15, Default = 0, Rounding = 1})
@@ -645,3 +636,13 @@ wait()
 
  
 
+game:GetService("RunService").Stepped:Connect(function()
+    if Toggles.TriggerFOV.Value then
+        local PossibleClosest = getClosestPlayer()
+        if PossibleClosest ~= nil then
+            if isPartVisible(PossibleClosest, PossibleClosest.Parent) then
+                mouse1click()  
+            end
+        end
+    end
+end)
