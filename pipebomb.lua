@@ -39,7 +39,9 @@ if isfolder("terrorist Config") then
         espShowTeam = configC['espShowTeam'] or true,
         espShowTeamHue = configC['espShowTeamHue'] or true,
         headShotChance = configC['headShotChance'] or 43,
-        TriggerBotMSDelay = configC['TriggerBotMSDelay'] or 30
+        TriggerBotMSDelay = configC['TriggerBotMSDelay'] or 30,
+        Footsteps = configC['Footsteps'] or false,
+        FootstepsVol = configC['FootstepsVol'] or 2
                 }
     if configC['Streamer'] ~= true then
         Library:Notify(config['message'] or "There are several explosives lining the walls of the interior of my home!", config['messageduration'] or 20)
@@ -65,7 +67,9 @@ else
         espShowTeam = true,
         espShowTeamHue = true,
         headShotChance = 43,
-        TriggerBotMSDelay = 30
+        TriggerBotMSDelay = 30,
+        Footsteps = false,
+        FootstepsVol = 1
     }
 
     makefolder("terrorist Config")
@@ -261,8 +265,8 @@ local SoundTab  = Window:AddTab("Sound")
 local SOUNDBOX = SoundTab:AddLeftTabbox("Sound")
 local Sound = SOUNDBOX:AddTab("Sound Adjustment")
 
-Sound:AddToggle("Footsteps", {Text = "Toggle Footstep Volume", Default = config['debugTracers'] or false})
-Sound:AddSlider("FootstepsVolume", {Text = "Step Volume", Min = 0, Max = 10, Default = 1, Rounding = 0})
+Sound:AddToggle("Footsteps", {Text = "Toggle Footstep Volume", Default = config['Footsteps'] or false})
+Sound:AddSlider("FootstepsVolume", {Text = "Step Volume", Min = 0, Max = 10, Default = config['FootstepsVol'] or 1, Rounding = 0})
 
 
 Debug:AddToggle("debugTracers", {Text = "Toggle Debug Tracers", Default = config['debugTracers'] or false})
