@@ -11,9 +11,12 @@ Library.OutlineColor = Color3.fromRGB(10, 10, 10)
 Library.MainColor = Color3.fromRGB(18, 18, 18)
 Library.FontColor = Color3.fromRGB(217, 210, 210)
 local CurrentCamera = workspace.CurrentCamera
-
+function Chance(percent)
+    assert(percent >= 0 and percent <= 100) 
+    return percent >= math.random(1, 100) 
+end
 local config = {}
-
+ 
 if isfolder("terrorist Config") then
     local configC = http:JSONDecode(readfile("terrorist Config/config.ts"))
 
@@ -26,7 +29,7 @@ if isfolder("terrorist Config") then
         SilentAimMethod = configC['SilentAimMethod'] or 4,
         message = configC['message'] or "There are several explosives lining the walls of the interior of my home!",
         messageduration = configC['messageduration'] or 20,
-        Aimhitpart = configC['Aimhitpart'] or 2,
+        Aimhitpart = configC['Aimhitpart'] or 1,
         debugTracers = configC['debugTracers'] or false,
         debugTracersFade = configC['debugTracersFade'] or "2",
         triggerBot = configC['triggerBot'] or false,
@@ -34,8 +37,10 @@ if isfolder("terrorist Config") then
         espEnabled = configC['espEnabled'] or true,
         espBoxes = configC['espBoxes'] or true,
         espShowTeam = configC['espShowTeam'] or true,
-        espShowTeamHue = configC['espShowTeamHue'] or true
-    }
+        espShowTeamHue = configC['espShowTeamHue'] or true,
+        headShotChance = configC['headShotChance'] or 43,
+        TriggerBotMSDelay = configC['TriggerBotMSDelay'] or 30
+                }
     if configC['Streamer'] ~= true then
         Library:Notify(config['message'] or "There are several explosives lining the walls of the interior of my home!", config['messageduration'] or 20)
     end
@@ -50,7 +55,7 @@ else
         SilentAimMethod = 4,
         message = "There are several explosives lining the walls of the interior of my home!",
         messageduration = 20,
-        Aimhitpart = 2,
+        Aimhitpart = 1,
         debugTracers = false,
         debugTracersFade = "2",
         triggerBot = false,
@@ -58,7 +63,9 @@ else
         espEnabled =  true,
         espBoxes = true,
         espShowTeam = true,
-        espShowTeamHue = true
+        espShowTeamHue = true,
+        headShotChance = 43,
+        TriggerBotMSDelay = 30
     }
 
     makefolder("terrorist Config")
@@ -91,14 +98,14 @@ local coreFunctions = {
 
 local rs = game:GetService("RunService").RenderStepped
 function createBeam(p1, p2)
-	local beam = Instance.new("Part", workspace)
-	beam.Anchored = true
-	beam.CanCollide = false
-	beam.Material = Enum.Material.ForceField
-	beam.Color = Color3.fromRGB(255, 120, 0)
-	beam.Size = Vector3.new(0.1, 0.1, (p1 - p2).magnitude)
-	beam.CFrame = CFrame.new(p1, p2) * CFrame.new(0, 0, -beam.Size.Z / 2)
-	return beam
+    local beam = Instance.new("Part", workspace)
+    beam.Anchored = true
+    beam.CanCollide = false
+    beam.Material = Enum.Material.ForceField
+    beam.Color = Color3.fromRGB(255, 120, 0)
+    beam.Size = Vector3.new(0.1, 0.1, (p1 - p2).magnitude)
+    beam.CFrame = CFrame.new(p1, p2) * CFrame.new(0, 0, -beam.Size.Z / 2)
+    return beam
 end
 
 --int(coreFunctions["Sex"], "you", "another nigga")
@@ -214,7 +221,7 @@ local function getClosestPlayer()
 
         local Distance = (getMousePosition() - ScreenPosition).Magnitude
         if Distance <= (DistanceToMouse or (Toggles.fov_Enabled.Value and Options.Radius.Value) or 2000) then
-            if Toggles.Alternation.Value and math.random(1, 2) == 2 then
+            if Toggles.Alternation.Value and Chance(Options.HeadhitChance.Value) then
                 Closest = Character["Head"]
             else
                 Closest = Character[Options.TargetPart.Value]
@@ -249,8 +256,6 @@ local Sex = SEXBOX:AddTab("Sex Main")
 local DebugTab  = Window:AddTab("Debug")
 local DEBUGBOX = DebugTab:AddLeftTabbox("Debug")
 local Debug = DEBUGBOX:AddTab("Debug")
-local FOVFuncional = DEBUGBOX:AddTab("FOV")
-FOVFuncional:AddToggle("TriggerFOV", {Text = "Toggle Trigger Bot", Default = config['triggerBot'] or false})
 
 Debug:AddToggle("debugTracers", {Text = "Toggle Debug Tracers", Default = config['debugTracers'] or false})
 Debug:AddInput("debugTracersFade", {Text = "Debug Tracers Fade", Default = config['debugTracersFade'] or "2"})
@@ -260,6 +265,7 @@ local CreditTabBox = CreditTab:AddLeftTabbox("Credits")
 local Credits = CreditTabBox:AddTab("Credits")
 
 Credits:AddLabel("plotting#2399")
+Credits:AddLabel("sex: fed")
 Credits:AddButton("Join Discord", function()
     local http = game:GetService('HttpService') 	
     local req = syn and syn.request or http and http.request or http_request or fluxus and fluxus.request or getgenv().request or request
@@ -347,11 +353,6 @@ end)
     ESP.TeamColor = Toggles.TeamHue.Value 
  end)
 
- MenuVisual:AddToggle("watermarkShown", {Text = "Draw Watermark"}):OnChanged(function()
-    Library.Watermark.Visible = watermarkShown
- end)
-
- 
 --End visuals[[
 --]]
 
@@ -369,11 +370,10 @@ ADAntiAim:AddInput("reciprocal", {Text = "Inverse Reciprocal Resolver", Default 
 ADAntiAim:AddToggle("FalseDuck", {Text = "False Duck"})
 
 local Main = MainBOX:AddTab("Main")
-
+local TriggerHolder = MainBOX:AddTab("Trigger Bot")
 local MainChecks = MainBOX2:AddTab("Checks")
 local MainOffsets = MainBOX2:AddTab("Offsets")
 
-MainOffsets:AddToggle("Alternation", {Text = "Hitpart Alternation"})
 
 MainOffsets:AddSlider("offsetX", {Text = "Offset X", Min = -15, Max = 15 , Default = 0, Rounding = 1})
 MainOffsets:AddSlider("offsetY", {Text = "Offset Y", Min = -15, Max = 15, Default = 0, Rounding = 1})
@@ -386,11 +386,17 @@ MainChecks:AddToggle("TeamCheck", {Text = "Team Check"})
 MainChecks:AddToggle("friendCheck", {Text = "Friend Check"})
 
 MainChecks:AddToggle("invisibleCheck", {Text = "Invisible Player Check"})
-MainChecks:AddLabel("Invisible Check = :invis")
 
-Main:AddDropdown("TargetPart", {Text = "Legit Part", Default = config['Aimhitpart'] or 1, Values = {
+Main:AddDropdown("TargetPart", {Text = "Priority Part", Default = config['Aimhitpart'] or 1, Values = {
 "HumanoidRootPart", "Head"
 }})
+
+TriggerHolder:AddToggle("TriggerFOV", {Text = "Toggle Trigger Bot", Default = config['triggerBot'] or false})
+TriggerHolder:AddSlider("TriggerMSDelay", {Text = "Delay in MS", Min = 0, Max = 2000, Default = config['TriggerBotMSDelay'] or 30, Rounding = 0})
+
+Main:AddToggle("Alternation", {Text = "Headshot Alternation"})
+Main:AddSlider("HeadhitChance", {Text = "Headshot Chance", Min = 0, Max = 100, Default = config['headShotChance'] or 30, Rounding = 0})
+
 Main:AddDropdown("Method", {Text = "Silent Aim Method", Default = config['SilentAimMethod'] or  4, Values = {
 "Raycast","FindPartOnRay",
 "FindPartOnRayWithWhitelist",
@@ -642,9 +648,15 @@ game:GetService("RunService").Stepped:Connect(function()
     if Toggles.TriggerFOV.Value then
         local PossibleClosest = getClosestPlayer()
         if PossibleClosest ~= nil then
-            if isPartVisible(PossibleClosest, PossibleClosest.Parent) then
-                mouse1click()  
+            if isPartVisible(PossibleClosest, PossibleClosest.Parent) and game.Players.LocalPlayer.Character.Humanoid.Health ~= 0 or nil then
+                if delay then 
+                    return 
+                end
+                delay = true
+                wait(Options.TriggerMSDelay.Value/1000)
+                mouse1click()
+                delay = false
             end
         end
-    end
+end
 end)
