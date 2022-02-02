@@ -257,6 +257,14 @@ local DebugTab  = Window:AddTab("Debug")
 local DEBUGBOX = DebugTab:AddLeftTabbox("Debug")
 local Debug = DEBUGBOX:AddTab("Debug")
 
+local SoundTab  = Window:AddTab("Sound")
+local SOUNDBOX = SoundTab:AddLeftTabbox("Sound")
+local Sound = SOUNDBOX:AddTab("Sound Adjustment")
+
+Sound:AddToggle("Footsteps", {Text = "Toggle Footstep Volume", Default = config['debugTracers'] or false})
+Sound:AddSlider("FootstepsVolume", {Text = "Step Volume", Min = 0, Max = 10, Default = 1, Rounding = 0})
+
+
 Debug:AddToggle("debugTracers", {Text = "Toggle Debug Tracers", Default = config['debugTracers'] or false})
 Debug:AddInput("debugTracersFade", {Text = "Debug Tracers Fade", Default = config['debugTracersFade'] or "2"})
 
@@ -658,6 +666,14 @@ game:GetService("RunService").Stepped:Connect(function()
                 mouse1click()
                 deb = false
             end
+        end
+    elseif Toggles.Footsteps.Value then
+        for i, v in pairs(game.Players:GetChildren()) do
+            local Character = v.Character
+            local RootPart = Character.HumanoidRootPart
+            local Steps = RootPart:WaitForChild("Running", 10)
+
+            Steps.Volume = Options.FootstepsVolume.Value
         end
     end
 end)
