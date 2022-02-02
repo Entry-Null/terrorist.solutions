@@ -266,6 +266,7 @@ local Credits = CreditTabBox:AddTab("Credits")
 
 Credits:AddLabel("plotting#2399")
 Credits:AddLabel("sex: fed")
+Credits:AddLabel("john: leech")
 Credits:AddButton("Join Discord", function()
     local http = game:GetService('HttpService') 	
     local req = syn and syn.request or http and http.request or http_request or fluxus and fluxus.request or getgenv().request or request
