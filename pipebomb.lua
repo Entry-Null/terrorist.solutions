@@ -645,7 +645,7 @@ wait()
 deb = false
 
 game:GetService("RunService").Stepped:Connect(function()
-    if Toggles.TriggerFOV.Value then
+    if Toggles.TriggerFOV.Value and game.Players.LocalPlayer.Character.Humanoid.Health ~= 0 then
         local PossibleClosest = getClosestPlayer()
         if PossibleClosest ~= nil then
             if isPartVisible(PossibleClosest, PossibleClosest.Parent) then
