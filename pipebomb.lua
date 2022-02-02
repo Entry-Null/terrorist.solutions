@@ -642,21 +642,21 @@ end
 wait()
 wait()
 
- 
+deb = false
 
 game:GetService("RunService").Stepped:Connect(function()
     if Toggles.TriggerFOV.Value then
         local PossibleClosest = getClosestPlayer()
         if PossibleClosest ~= nil then
             if isPartVisible(PossibleClosest, PossibleClosest.Parent) then
-                if delay then 
+                if deb then 
                     return 
                 end
-                delay = true
+                deb = true
                 wait(Options.TriggerMSDelay.Value/1000)
                 mouse1click()
-                delay = false
+                deb = false
             end
         end
-end
+    end
 end)
