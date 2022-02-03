@@ -177,7 +177,7 @@ end
 
 function CalculateThreat3D(Character)
     local distance = tonumber(Options.DistanceThreat.Value)
-    local magnitude = Functions.GetDistanceSq3(game.LocalPlayer.Character.Head.Position, Character.Head.Position)
+    local magnitude = Functions.GetDistanceSq3(game.Players.LocalPlayer.Character.Head.Position, Character.Head.Position)
     return distance > magnitude
 end
 
