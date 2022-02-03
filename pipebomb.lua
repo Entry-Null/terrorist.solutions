@@ -16,7 +16,7 @@ function Chance(percent)
     return percent >= math.random(1, 100) 
 end
 local config = {}
- 
+
 if isfolder("terrorist Config") then
     local configC = http:JSONDecode(readfile("terrorist Config/config.ts"))
 
@@ -128,6 +128,13 @@ FakeduckResolve = function(n, k)
     local fac = Default
     
     return fac(n) / fac(n - k)
+end,
+
+GetDistanceSq3 = function(v1, v2)
+	local a = v2.x - v1.x
+	local b = v2.y - v1.y
+	local c = v2.z - v1.z
+    return a*a + b*b + c*c
 end
 
 }
@@ -150,24 +157,39 @@ end
 local function ValidateArguments(Args, RayMethod)
 local Matches = 0
 if #Args < RayMethod.ArgCountRequired then
-return false
+    return false
 end
 for Pos, Argument in next, Args do
-if typeof(Argument) == RayMethod.Args[Pos] then
-    Matches = Matches + 1
+    if typeof(Argument) == RayMethod.Args[Pos] then
+        Matches = Matches + 1
+    end
 end
-end
-return Matches >= RayMethod.ArgCountRequired
+    return Matches >= RayMethod.ArgCountRequired
 end
 
 local function getDirection(Origin, Position)
-return (Position - Origin).Unit * 1000
+    return (Position - Origin).Unit * 1000
 end
 
 local function getMousePosition()
-return Vector2.new(Mouse.X, Mouse.Y)
+    return Vector2.new(Mouse.X, Mouse.Y)
 end
 
+function CalculateThreat3D(Character)
+    local distance = tonumber(Options.DistanceThreat.Value)
+    local magnitude = Functions.GetDistanceSq3(game.LocalPlayer.Character.Head.Position, Character.Head.Position)
+    return distance > magnitude
+end
+
+function isThreat(p)
+    local ignorelist = {game.Players.LocalPlayer.Character, p.Character}
+    local parts = CurrentCamera:GetPartsObscuringTarget({p.Character.Head.CFrame:ToObjectSpace()}, ignorelist)
+    if #parts < 2 then
+        return true
+    else
+        return false
+    end
+end
 
 function isPartVisible(Part, PartDescendant)
     local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded.Wait(LocalPlayer.CharacterAdded)
@@ -201,6 +223,10 @@ local function getClosestPlayer()
         local Character = Player.Character
         
         if Toggles.VisCheck.Value and not isPartVisible(Character[Options.TargetPart.Value], Character) then
+            continue
+        end
+
+        if Toggles.CalculateThreat.Value and CalculateThreat3D(Character) --[[and not isThreat(Player)]] then
             continue
         end
 
@@ -270,6 +296,9 @@ Sound:AddSlider("FootstepsVolume", {Text = "Step Volume", Min = 0, Max = 10, Def
 
 
 Debug:AddToggle("debugTracers", {Text = "Toggle Debug Tracers", Default = config['debugTracers'] or false})
+Debug:AddToggle("CalculateThreat", {Text = "Toggle Threat Calculation", Default = false})
+Debug:AddInput("DistanceThreat", {Text = "Distance Threat TH", Default = "1000"})
+
 Debug:AddInput("debugTracersFade", {Text = "Debug Tracers Fade", Default = config['debugTracersFade'] or "2"})
 
 local CreditTab = Window:AddTab("Credits")
