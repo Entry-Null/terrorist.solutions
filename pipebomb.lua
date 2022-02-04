@@ -292,6 +292,98 @@ local SoundTab  = Window:AddTab("Sound")
 local SOUNDBOX = SoundTab:AddLeftTabbox("Sound")
 local Sound = SOUNDBOX:AddTab("Sound Adjustment")
 
+local Boombox  = Window:AddTab("Boombox")
+local BoomboxBOX = Boombox:AddLeftTabbox("Boombox")
+local BoomboxBOXVisuals = Boombox:AddRightTabbox("Visual")
+
+local BoomboxHV = BoomboxBOXVisuals:AddTab("Visuals")
+
+local BoomboxH = BoomboxBOX:AddTab("Boombox")
+
+local LocalPlayer = game.Players.LocalPlayer
+local SoundFE = game.SoundService.RespectFilteringEnabled
+local Radios = {}
+local BackPack = LocalPlayer.Backpack
+local Players = game:GetService("Players");
+
+local function GetPlayer(Input)
+    for _, Player in ipairs(Players:GetPlayers()) do
+        if (string.lower(Input) == string.sub(string.lower(Player.Name), 1, #Input)) then
+            return Player;
+        end
+    end
+end
+
+function massPlay(...)
+    local Tools = BackPack:GetChildren()
+    for _, _B in next, Tools do
+    	if string.find(_B.Name:lower(), 'boombox') then
+    		table.insert(Radios, _B)
+    		_B['Parent'] = LocalPlayer.Character
+            local args = {
+                [1] = "PlaySong",
+                [2] = (...)
+            }
+            _B.Remote:FireServer(unpack(args))
+    	end
+    end
+end
+-- massPlay(<id>)
+
+function demesh()
+    for _, tool in  pairs(Radios) do
+        if string.find(tool.Name:lower(), 'boombox') and tool:IsA("Tool") then
+            tool.Handle.Mesh:Destroy()
+        end
+    end
+end
+
+--demesh(<void>)
+
+function mute(plr)
+    local playerToMute = GetPlayer(plr)
+   for _, tool in pairs(playerToMute.Character:GetDescendants()) do
+       if tool:IsA("Sound") then
+           tool.Playing = false
+       end
+   end
+    Library:Notify("Muted "..playerToMute.Name)
+end
+
+-- mute(<string>)
+
+
+--sync ( <SyncTime> )
+
+BoomboxH:AddInput("MassplayID", {Text = "Mass play ID", Default = "<AUDIO ID>"})
+
+BoomboxH:AddButton("Massplay", function()
+    massPlay(Options.MassplayID.Value)
+    Library:Notify("Massplaying ".. Options.MassplayID.Value)
+end)
+
+BoomboxH:AddInput("PlayerMuteName", {Text = "PLR To Nume", Default = "<Shortend Name>"})
+
+BoomboxH:AddButton("Mute Plr", function()
+    mute(Options.PlayerMuteName.Value)
+end)
+
+BoomboxH:AddInput("SyncTime", {Text = "Sync Radios", Default = "<number>"})
+
+BoomboxH:AddButton("Sync", function()
+    for _, sound in  pairs(LocalPlayer.Character:GetDescendants()) do
+        if sound:IsA("Sound") then
+            sound.TimePosition = tonumber(Options.SyncTime.Value)
+        end
+    end
+    Library:Notify("Sync set to  ".. Options.SyncTime.Value)
+end)
+
+BoomboxHV:AddButton("Demesh", function()
+    demesh()
+    Library:Notify("Demeshed")
+end)
+
 Sound:AddToggle("Footsteps", {Text = "Toggle Footstep Volume", Default = config['Footsteps'] or false})
 Sound:AddSlider("FootstepsVolume", {Text = "Step Volume", Min = 0, Max = 10, Default = config['FootstepsVol'] or 1, Rounding = 0})
 
