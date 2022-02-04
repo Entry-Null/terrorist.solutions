@@ -426,9 +426,9 @@ BoomboxHV:AddButton("Visualise", function()
         })
         pos =  Create('BodyGyro',{
             Parent = v.Handle;
-            MaxTorque = Vector3.new(Options.rotX.Value * 2, Options.rotY.Value * 2, Options.rotZ.Value * 2);
+            MaxTorque = Vector3.new(Options.rotX.Value * 1.2, Options.rotY.Value * 1.2, Options.rotZ.Value * 1.2);
             D =  0;
-            CFrame = CFrame.new(Options.rotX.Value* 2, Options.rotY.Value* 2, Options.rotZ.Value* 2);
+            CFrame = CFrame.new(Options.rotX.Value* 1.2, Options.rotY.Value* 1.2, Options.rotZ.Value* 1.2);
             P = 1.0e5;
         })
         for k, c in pairs(LocalPlayer.Character:GetDescendants()) do
@@ -884,7 +884,3 @@ game:GetService("RunService").Stepped:Connect(function()
         end
     end
 end)
-
-
-
-
