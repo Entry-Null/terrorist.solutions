@@ -315,6 +315,7 @@ local function GetPlayer(Input)
 end
 
 function massPlay(...)
+    local BackPack = LocalPlayer.Backpack
     local Tools = BackPack:GetChildren()
     for _, _B in next, Tools do
     	if string.find(_B.Name:lower(), 'boombox') then
@@ -353,16 +354,93 @@ end
 -- mute(<string>)
 
 
+local Create = function(Class,Properties)
+	Properties = Properties or {};
+	local Obj = Instance.new(Class)
+	for K,V in next, Properties do 
+		if rawequal(K,'Parent') then
+			continue;
+		end
+		Obj[K] = V;
+	end
+	if Properties['Parent'] then
+		Obj['Parent'] = Properties['Parent']
+	end
+	return Obj
+end
+
+local fullCircle = 2 * math.pi
+
+local function getXAndZPositions(angle)
+	local x = math.cos(angle) * Options.BoomBoxRadius.Value
+	local z = math.sin(angle) * Options.BoomBoxRadius.Value
+	return x, z
+end
+
+BoomboxH:AddButton("Visualise", function()
+    game["Run Service"].RenderStepped:connect(
+        function()
+            setscriptable(game.Players.LocalPlayer, "SimulationRadius", true)
+            game.Players.LocalPlayer.SimulationRadius = math.huge * math.huge, math.huge * math.huge * 1 / 0 * 1 / 0 * 1 / 0 * 1 / 0 * 1 / 0
+        end
+     )
+     
+     local LocalPlayer = game:GetService("Players").LocalPlayer
+     LocalPlayer.SimulationRadiusChanged:Connect(function(radius)
+        radius = 9e9
+        return radius
+     end)
+    for i, v in pairs(Radios) do
+        pos =  Create('BodyPosition',{
+            Parent = v.Handle;
+            MaxForce = Vector3.new(1/0,1/0,1/0);
+            Position =  LocalPlayer.Character.HumanoidRootPart.Position;
+            P = 1.0e5;
+        })
+        pos =  Create('BodyGyro',{
+            Parent = v.Handle;
+            MaxTorque = Vector3.new(5,math.random(2,5),math.random(2,5));
+            D =  3;
+            CFrame = CFrame.new(Options.rotX.Value, Options.rotY.Value, Options.rotZ.Value);
+            P = 1.0e5;
+        })
+        for k, c in pairs(LocalPlayer.Character:GetDescendants()) do
+            if c['Name'] == 'RightGrip' then c:Destroy() end
+        end
+    end
+    game:GetService("RunService").Heartbeat:Connect(function()
+        for i, v in pairs(Radios) do
+            LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+            local angle = i * (fullCircle / #Radios)
+            local x, z = getXAndZPositions(angle)
+            
+            local position = (LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(x, 0, z)).p
+            local lookAt = LocalPlayer.Character.HumanoidRootPart.Position
+            local finalposition = CFrame.new(position, lookAt).p
+
+            v:FindFirstChild("Handle").BodyPosition.Position = finalposition
+        end
+    end)
+end)
+
+BoomboxH:AddSlider("BoomBoxRadius", {Text = "Visualise Radius", Min = 0, Max = 10, Default =  1, Rounding = 0})
+
+BoomboxH:AddSlider("rotX", {Text = "Visualise rot X", Min = -500, Max = 500, Default =  1, Rounding = 0})
+BoomboxH:AddSlider("rotY", {Text = "Visualise rot Y", Min = -500, Max = 500, Default =  1, Rounding = 0})
+BoomboxH:AddSlider("rotZ", {Text = "Visualise rot Z", Min = -500, Max = 500, Default =  1, Rounding = 0})
+
+
 --sync ( <SyncTime> )
 
 BoomboxH:AddInput("MassplayID", {Text = "Mass play ID", Default = "<AUDIO ID>"})
 
 BoomboxH:AddButton("Massplay", function()
+        LocalPlayer.Character.Humanoid:UnequipTools()
     massPlay(Options.MassplayID.Value)
     Library:Notify("Massplaying ".. Options.MassplayID.Value)
 end)
 
-BoomboxH:AddInput("PlayerMuteName", {Text = "PLR To Nume", Default = "<Shortend Name>"})
+BoomboxH:AddInput("PlayerMuteName", {Text = "PLR To Mute", Default = "<Shortend Name>"})
 
 BoomboxH:AddButton("Mute Plr", function()
     mute(Options.PlayerMuteName.Value)
