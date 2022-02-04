@@ -334,7 +334,7 @@ end
 function demesh()
     for _, tool in  pairs(Radios) do
         if string.find(tool.Name:lower(), 'boombox') and tool:IsA("Tool") then
-            tool.Handle.Mesh:Destroy()
+            tool.Handle:FindFirstChildOfClass("Mesh"):Destroy()
         end
     end
 end
@@ -378,6 +378,8 @@ local function getXAndZPositions(angle)
 end
 
 --sync ( <SyncTime> )
+
+workspace.FallenPartsDestroyHeight = 1/0
 
 BoomboxH:AddInput("MassplayID", {Text = "Mass play ID", Default = "<AUDIO ID>"})
 
@@ -434,6 +436,13 @@ BoomboxHV:AddButton("Visualise", function()
         for k, c in pairs(LocalPlayer.Character:GetDescendants()) do
             if c['Name'] == 'RightGrip' then c:Destroy() end
         end
+        LocalPlayer.Character.ChildAdded:Connect(function(tool)
+            if tool:IsA("Tool") and Toggles.RemoveHandles.Value then
+                for k, c in pairs(LocalPlayer.Character:GetDescendants()) do
+                    if c['Name'] == 'RightGrip' then c:Destroy() end
+                end
+            end
+        end)
     end
     game:GetService("RunService").Heartbeat:Connect(function()
         for i, v in pairs(Radios) do
@@ -449,6 +458,8 @@ BoomboxHV:AddButton("Visualise", function()
         end
     end)
 end)
+
+BoomboxHV:AddToggle("RemoveHandles", {Text = "Toggle Remove Handles", Default = false})
 
 BoomboxHV:AddSlider("BoomBoxRadius", {Text = "Visualise Radius", Min = 0, Max = 10, Default =  1, Rounding = 0})
 
