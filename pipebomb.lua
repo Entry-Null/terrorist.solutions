@@ -434,6 +434,11 @@ BoomboxHV:AddButton("Visualise", function()
         for k, c in pairs(LocalPlayer.Character:GetDescendants()) do
             if c['Name'] == 'RightGrip' then c:Destroy() end
         end
+        LocalPlayer.Character.ChildAdded:Connect(function(tool)
+            for k, c in pairs(tool:GetDescendants()) do
+                if c['Name'] == 'RightGrip' then c:Destroy() end
+            end
+        end)
     end
     game:GetService("RunService").Heartbeat:Connect(function()
         for i, v in pairs(Radios) do
