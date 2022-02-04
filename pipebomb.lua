@@ -369,7 +369,7 @@ local Create = function(Class,Properties)
 	return Obj
 end
 
-local fullCircle = math.sin(2 * math.pi)
+local fullCircle = 2 * math.pi
 
 local function getXAndZPositions(angle)
 	local x = math.cos(angle) * Options.BoomBoxRadius.Value
@@ -438,7 +438,7 @@ BoomboxHV:AddButton("Visualise", function()
     game:GetService("RunService").Heartbeat:Connect(function()
         for i, v in pairs(Radios) do
             LocalPlayer.Character:WaitForChild("HumanoidRootPart")
-            local angle = i * (fullCircle * Options.SidesBoom.Value / #Radios)
+            local angle = i * (fullCircle / #Radios)
             local x, z = getXAndZPositions(angle)
             
             local position = (LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(x, Options.pitchYBoom.Value, z)).p
@@ -453,8 +453,6 @@ end)
 BoomboxHV:AddSlider("BoomBoxRadius", {Text = "Visualise Radius", Min = 0, Max = 10, Default =  1, Rounding = 0})
 
 BoomboxHV:AddSlider("pitchYBoom", {Text = "Visualise Rise Y", Min = -15, Max = 15, Default =  1, Rounding = 0})
-
-BoomboxHV:AddSlider("SidesBoom", {Text = "Visualise precision", Min = -50, Max = 50, Default =  1, Rounding = 0})
 
 BoomboxHV:AddSlider("rotX", {Text = "Visualise rot X", Min = -500, Max = 500, Default =  1, Rounding = 0})
 BoomboxHV:AddSlider("rotY", {Text = "Visualise rot Y", Min = -500, Max = 500, Default =  1, Rounding = 0})
