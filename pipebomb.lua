@@ -268,6 +268,7 @@ local Window = Library:CreateWindow("terrorist.solutions")
 local GeneralTab = Window:AddTab("Aimbot")
 local MainBOX = GeneralTab:AddLeftTabbox("Main")
 local MainBOX2 = GeneralTab:AddRightTabbox("Main")
+local MainBOX5 = GeneralTab:AddRightTabbox("Main")
 
 local VisualTab = Window:AddTab("Visuals")
 local VisualBOX = VisualTab:AddLeftTabbox("Main")
@@ -412,9 +413,9 @@ ADAntiAim:AddInput("reciprocal", {Text = "Inverse Reciprocal Resolver", Default 
 ADAntiAim:AddToggle("FalseDuck", {Text = "False Duck"})
 
 local Main = MainBOX:AddTab("Main")
-local TriggerHolder = MainBOX:AddTab("Trigger Bot")
+
 local MainChecks = MainBOX2:AddTab("Checks")
-local MainOffsets = MainBOX2:AddTab("Offsets")
+local MainOffsets = MainBOX5:AddTab("Offsets")
 
 
 MainOffsets:AddSlider("offsetX", {Text = "Offset X", Min = -15, Max = 15 , Default = 0, Rounding = 1})
@@ -432,9 +433,6 @@ MainChecks:AddToggle("invisibleCheck", {Text = "Invisible Player Check"})
 Main:AddDropdown("TargetPart", {Text = "Priority Part", Default = config['Aimhitpart'] or 1, Values = {
 "HumanoidRootPart", "Head"
 }})
-
-TriggerHolder:AddToggle("TriggerFOV", {Text = "Toggle Trigger Bot", Default = config['triggerBot'] or false})
-TriggerHolder:AddSlider("TriggerMSDelay", {Text = "Delay in MS", Min = 0, Max = 2000, Default = config['TriggerBotMSDelay'] or 30, Rounding = 0})
 
 Main:AddToggle("Alternation", {Text = "Headshot Alternation"})
 Main:AddSlider("HeadhitChance", {Text = "Headshot Chance", Min = 0, Max = 100, Default = config['headShotChance'] or 30, Rounding = 0})
@@ -463,6 +461,10 @@ Main:AddToggle("fov_Enabled", {Text = "Enabled", Default = config['SilentAimFOVE
 Main:AddSlider("Radius", {Text = "Radius", Min = 0, Max = 360, Default = config["SilentAimFOVRad"] or 180, Rounding = 0}):OnChanged(function()
 fov_circle.Radius = Options.Radius.Value
 end)
+
+local TriggerHolder = FieldOfViewBOX:AddTab("Trigger Bot")
+TriggerHolder:AddToggle("TriggerFOV", {Text = "Toggle Trigger Bot", Default = config['triggerBot'] or false})
+TriggerHolder:AddSlider("TriggerMSDelay", {Text = "Delay in MS", Min = 0, Max = 2000, Default = config['TriggerBotMSDelay'] or 30, Rounding = 0})
 
 Main:AddToggle("Filled", {Text = "Filled"}):OnChanged(function()
 fov_circle.Filled = Toggles.Filled.Value
