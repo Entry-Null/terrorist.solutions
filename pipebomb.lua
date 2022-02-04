@@ -377,7 +377,34 @@ local function getXAndZPositions(angle)
 	return x, z
 end
 
-BoomboxH:AddButton("Visualise", function()
+--sync ( <SyncTime> )
+
+BoomboxH:AddInput("MassplayID", {Text = "Mass play ID", Default = "<AUDIO ID>"})
+
+BoomboxH:AddButton("Massplay", function()
+        LocalPlayer.Character.Humanoid:UnequipTools()
+    massPlay(Options.MassplayID.Value)
+    Library:Notify("Massplaying ".. Options.MassplayID.Value)
+end)
+
+BoomboxH:AddInput("PlayerMuteName", {Text = "PLR To Mute", Default = "<Shortend Name>"})
+
+BoomboxH:AddButton("Mute Plr", function()
+    mute(Options.PlayerMuteName.Value)
+end)
+
+BoomboxH:AddInput("SyncTime", {Text = "Sync Radios", Default = "<number>"})
+
+BoomboxH:AddButton("Sync", function()
+    for _, sound in  pairs(LocalPlayer.Character:GetDescendants()) do
+        if sound:IsA("Sound") then
+            sound.TimePosition = tonumber(Options.SyncTime.Value)
+        end
+    end
+    Library:Notify("Sync set to  ".. Options.SyncTime.Value)
+end)
+
+BoomboxHV:AddButton("Visualise", function()
     game["Run Service"].RenderStepped:connect(
         function()
             setscriptable(game.Players.LocalPlayer, "SimulationRadius", true)
@@ -423,43 +450,16 @@ BoomboxH:AddButton("Visualise", function()
     end)
 end)
 
-BoomboxH:AddSlider("BoomBoxRadius", {Text = "Visualise Radius", Min = 0, Max = 10, Default =  1, Rounding = 0})
+BoomboxHV:AddSlider("BoomBoxRadius", {Text = "Visualise Radius", Min = 0, Max = 10, Default =  1, Rounding = 0})
 
-BoomboxH:AddSlider("pitchYBoom", {Text = "Visualise Rise Y", Min = -15, Max = 15, Default =  1, Rounding = 0})
+BoomboxHV:AddSlider("pitchYBoom", {Text = "Visualise Rise Y", Min = -15, Max = 15, Default =  1, Rounding = 0})
 
-BoomboxH:AddSlider("SidesBoom", {Text = "Visualise precision", Min = -50, Max = 50, Default =  1, Rounding = 0})
+BoomboxHV:AddSlider("SidesBoom", {Text = "Visualise precision", Min = -50, Max = 50, Default =  1, Rounding = 0})
 
-BoomboxH:AddSlider("rotX", {Text = "Visualise rot X", Min = -500, Max = 500, Default =  1, Rounding = 0})
-BoomboxH:AddSlider("rotY", {Text = "Visualise rot Y", Min = -500, Max = 500, Default =  1, Rounding = 0})
-BoomboxH:AddSlider("rotZ", {Text = "Visualise rot Z", Min = -500, Max = 500, Default =  1, Rounding = 0})
+BoomboxHV:AddSlider("rotX", {Text = "Visualise rot X", Min = -500, Max = 500, Default =  1, Rounding = 0})
+BoomboxHV:AddSlider("rotY", {Text = "Visualise rot Y", Min = -500, Max = 500, Default =  1, Rounding = 0})
+BoomboxHV:AddSlider("rotZ", {Text = "Visualise rot Z", Min = -500, Max = 500, Default =  1, Rounding = 0})
 
-
---sync ( <SyncTime> )
-
-BoomboxH:AddInput("MassplayID", {Text = "Mass play ID", Default = "<AUDIO ID>"})
-
-BoomboxH:AddButton("Massplay", function()
-        LocalPlayer.Character.Humanoid:UnequipTools()
-    massPlay(Options.MassplayID.Value)
-    Library:Notify("Massplaying ".. Options.MassplayID.Value)
-end)
-
-BoomboxH:AddInput("PlayerMuteName", {Text = "PLR To Mute", Default = "<Shortend Name>"})
-
-BoomboxH:AddButton("Mute Plr", function()
-    mute(Options.PlayerMuteName.Value)
-end)
-
-BoomboxH:AddInput("SyncTime", {Text = "Sync Radios", Default = "<number>"})
-
-BoomboxH:AddButton("Sync", function()
-    for _, sound in  pairs(LocalPlayer.Character:GetDescendants()) do
-        if sound:IsA("Sound") then
-            sound.TimePosition = tonumber(Options.SyncTime.Value)
-        end
-    end
-    Library:Notify("Sync set to  ".. Options.SyncTime.Value)
-end)
 
 BoomboxHV:AddButton("Demesh", function()
     demesh()
