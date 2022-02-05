@@ -540,7 +540,7 @@ BoomboxHV:AddButton("Demesh", function()
     Library:Notify("Demeshed")
 end)
 
-BoomboxHV:AddToggle("RHOP", {Text = "Safe Visualise", Default = true})
+BoomboxHV:AddToggle("RHOP", {Text = "Safe Visualise", Default = false})
 
 Sound:AddToggle("Footsteps", {Text = "Toggle Footstep Volume", Default = config['Footsteps'] or false})
 Sound:AddSlider("FootstepsVolume", {Text = "Step Volume", Min = 0, Max = 10, Default = config['FootstepsVol'] or 1, Rounding = 0})
