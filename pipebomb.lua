@@ -433,6 +433,7 @@ BoomboxHV:AddButton("Visualise", function()
      coroutine.wrap(function()
         repeat
             game:GetService('RunService')['RenderStepped']:Wait()
+            setscriptable(game.Players.LocalPlayer, "SimulationRadius", true)
             game.Players.LocalPlayer.SimulationRadius = math.huge * math.huge, math.huge * math.huge * 1 / 0 * 1 / 0 * 1 / 0 * 1 / 0 * 1 / 0
         until not d
     end)()
