@@ -433,7 +433,7 @@ BoomboxHV:AddButton("Visualise", function()
      coroutine.wrap(function()
         repeat
             game:GetService('RunService')['RenderStepped']:Wait()
-            setsimulationradius(1/0, 1/0)
+            game.Players.LocalPlayer.SimulationRadius = math.huge * math.huge, math.huge * math.huge * 1 / 0 * 1 / 0 * 1 / 0 * 1 / 0 * 1 / 0
         until not d
     end)()
     for i, v in pairs(Radios) do
