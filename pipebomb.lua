@@ -376,35 +376,13 @@ local function getXAndZPositions(angle)
 	local z = math.sin(angle) * Options.BoomBoxRadius.Value
 	return x, z
 end
-
---sync ( <SyncTime> )
-
-BoomboxH:AddInput("MassplayID", {Text = "Mass play ID", Default = "<AUDIO ID>"})
-
-BoomboxH:AddButton("Massplay", function()
-        LocalPlayer.Character.Humanoid:UnequipTools()
-    massPlay(Options.MassplayID.Value)
-    Library:Notify("Massplaying ".. Options.MassplayID.Value)
-end)
-
-BoomboxH:AddInput("PlayerMuteName", {Text = "PLR To Mute", Default = "<Shortend Name>"})
-
-BoomboxH:AddButton("Mute Plr", function()
-    mute(Options.PlayerMuteName.Value)
-end)
-
-BoomboxH:AddInput("SyncTime", {Text = "Sync Radios", Default = "<number>"})
-
-BoomboxH:AddButton("Sync", function()
-    for _, sound in  pairs(LocalPlayer.Character:GetDescendants()) do
-        if sound:IsA("Sound") then
-            sound.TimePosition = tonumber(Options.SyncTime.Value)
-        end
+function clearhandles()
+    for k, c in pairs(LocalPlayer.Character:GetDescendants()) do
+        if c['Name'] == 'RightGrip' then c:Destroy() end
     end
-    Library:Notify("Sync set to  ".. Options.SyncTime.Value)
-end)
-
-BoomboxH:AddButton("Clear Cache", function()
+    Library:Notify("Cleared all handles.")
+end
+function clearcache()
     Library:Notify("Cleared cache of  " ..#Radios.. " Tools")
     table.clear(Radios)
     game["Run Service"].RenderStepped:connect(
@@ -450,13 +428,43 @@ BoomboxH:AddButton("Clear Cache", function()
             end
         end)
     end
+end
+--sync ( <SyncTime> )
+
+BoomboxH:AddInput("MassplayID", {Text = "Mass play ID", Default = "<AUDIO ID>"})
+
+BoomboxH:AddButton("Massplay", function()
+    LocalPlayer.Character.Humanoid:UnequipTools()
+    massPlay(Options.MassplayID.Value)
+    if Toggles.RHOP.Value then
+        clearhandles()
+    end
+    Library:Notify("Massplaying ".. Options.MassplayID.Value)
+end)
+
+BoomboxH:AddInput("PlayerMuteName", {Text = "PLR To Mute", Default = "<Shortend Name>"})
+
+BoomboxH:AddButton("Mute Plr", function()
+    mute(Options.PlayerMuteName.Value)
+end)
+
+BoomboxH:AddInput("SyncTime", {Text = "Sync Radios", Default = "<number>"})
+
+BoomboxH:AddButton("Sync", function()
+    for _, sound in  pairs(LocalPlayer.Character:GetDescendants()) do
+        if sound:IsA("Sound") then
+            sound.TimePosition = tonumber(Options.SyncTime.Value)
+        end
+    end
+    Library:Notify("Sync set to  ".. Options.SyncTime.Value)
+end)
+
+BoomboxH:AddButton("Clear Cache", function()
+    clearcache()
 end)
 
 BoomboxH:AddButton("Clear Handles", function()
-    for k, c in pairs(LocalPlayer.Character:GetDescendants()) do
-        if c['Name'] == 'RightGrip' then c:Destroy() end
-    end
-    Library:Notify("Cleared all handles.")
+    clearhandles()
 end)
 
 BoomboxHV:AddButton("Visualise", function()
@@ -531,6 +539,8 @@ BoomboxHV:AddButton("Demesh", function()
     demesh()
     Library:Notify("Demeshed")
 end)
+
+BoomboxHV:AddToggle("RHOP", {Text = "Safe Visualise", Default = true})
 
 Sound:AddToggle("Footsteps", {Text = "Toggle Footstep Volume", Default = config['Footsteps'] or false})
 Sound:AddSlider("FootstepsVolume", {Text = "Step Volume", Min = 0, Max = 10, Default = config['FootstepsVol'] or 1, Rounding = 0})
