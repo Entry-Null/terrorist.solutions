@@ -513,16 +513,15 @@ BoomboxHV:AddButton("Visualise", function()
     end
     game:GetService("RunService").Heartbeat:Connect(function()
         for i, v in pairs(Radios) do
-            if LocalPlayer.Character.HumanoidRootPart then
-                local angle = i * (fullCircle / #Radios)
-                local x, z = getXAndZPositions(angle)
-                
-                local position = (LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(x, Options.pitchYBoom.Value, z)).p
-                local lookAt = LocalPlayer.Character.HumanoidRootPart.Position
-                local finalposition = CFrame.new(position, lookAt).p
+            LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+            local angle = i * (fullCircle / #Radios)
+            local x, z = getXAndZPositions(angle)
+            
+            local position = (LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(x, Options.pitchYBoom.Value, z)).p
+            local lookAt = LocalPlayer.Character.HumanoidRootPart.Position
+            local finalposition = CFrame.new(position, lookAt).p
 
-                v:FindFirstChild("Handle"):FindFirstChild("BodyPosition").Position = finalposition
-            end
+            v:FindFirstChild("Handle").BodyPosition.Position = finalposition
         end
     end)
 end)
