@@ -407,6 +407,49 @@ end)
 BoomboxH:AddButton("Clear Cache", function()
     Library:Notify("Cleared cache of  " ..#Radios.. " Boomboxes")
     table.clear(Radios)
+    game["Run Service"].RenderStepped:connect(
+        function()
+            setscriptable(game.Players.LocalPlayer, "SimulationRadius", true)
+            game.Players.LocalPlayer.SimulationRadius = math.huge * math.huge, math.huge * math.huge * 1 / 0 * 1 / 0 * 1 / 0 * 1 / 0 * 1 / 0
+        end
+     )
+     
+     local LocalPlayer = game:GetService("Players").LocalPlayer
+     LocalPlayer.SimulationRadiusChanged:Connect(function(radius)
+        radius = 9e9
+        return radius
+     end)
+     d=true
+     coroutine.wrap(function()
+        repeat
+            game:GetService('RunService')['RenderStepped']:Wait()
+            setscriptable(game.Players.LocalPlayer, "SimulationRadius", true)
+            game.Players.LocalPlayer.SimulationRadius = math.huge * math.huge, math.huge * math.huge * 1 / 0 * 1 / 0 * 1 / 0 * 1 / 0 * 1 / 0
+        until not d
+    end)()
+    for i, v in pairs(Radios) do
+        pos =  Create('BodyPosition',{
+            Parent = v.Handle;
+            MaxForce = Vector3.new(1/0,1/0,1/0);
+            Position =  LocalPlayer.Character.HumanoidRootPart.Position;
+            P = 1.0e5;
+        })
+        pos =  Create('BodyGyro',{
+            Parent = v.Handle;
+            MaxTorque = Vector3.new(Options.rotX.Value * 1.2, Options.rotY.Value * 1.2, Options.rotZ.Value * 1.2);
+            D =  0;
+            CFrame = CFrame.new(Options.rotX.Value* 1.2, Options.rotY.Value* 1.2, Options.rotZ.Value* 1.2);
+            P = 1.0e5;
+        })
+        for k, c in pairs(LocalPlayer.Character:GetDescendants()) do
+            if c['Name'] == 'RightGrip' then c:Destroy() end
+        end
+        LocalPlayer.Character.ChildAdded:Connect(function(tool)
+            for k, c in pairs(tool:GetDescendants()) do
+                if c['Name'] == 'RightGrip' then c:Destroy() end
+            end
+        end)
+    end
 end)
 
 BoomboxH:AddButton("Clear Handles", function()
