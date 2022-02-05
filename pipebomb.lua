@@ -429,11 +429,12 @@ BoomboxHV:AddButton("Visualise", function()
         radius = 9e9
         return radius
      end)
+     d=true
      coroutine.wrap(function()
         repeat
             game:GetService('RunService')['RenderStepped']:Wait()
             setsimulationradius(1/0, 1/0)
-        until not 1 > 0
+        until not d
     end)()
     for i, v in pairs(Radios) do
         pos =  Create('BodyPosition',{
