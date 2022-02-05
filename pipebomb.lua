@@ -409,6 +409,13 @@ BoomboxH:AddButton("Clear Cache", function()
     table.clear(Radios)
 end)
 
+BoomboxH:AddButton("Clear Handles", function()
+    for k, c in pairs(LocalPlayer.Character:GetDescendants()) do
+        if c['Name'] == 'RightGrip' then c:Destroy() end
+    end
+    Library:Notify("Cleared all handles.")
+end)
+
 BoomboxHV:AddButton("Visualise", function()
     game["Run Service"].RenderStepped:connect(
         function()
