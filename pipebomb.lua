@@ -405,7 +405,7 @@ BoomboxH:AddButton("Sync", function()
 end)
 
 BoomboxH:AddButton("Clear Cache", function()
-    Library:Notify("Cleared cache of  " ..#Radios.. " Boomboxes")
+    Library:Notify("Cleared cache of  " ..#Radios.. " Tools")
     table.clear(Radios)
     game["Run Service"].RenderStepped:connect(
         function()
