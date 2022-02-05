@@ -521,7 +521,7 @@ BoomboxHV:AddButton("Visualise", function()
                 local lookAt = LocalPlayer.Character.HumanoidRootPart.Position
                 local finalposition = CFrame.new(position, lookAt).p
 
-                v:FindFirstChild("Handle").BodyPosition.Position = finalposition
+                v:FindFirstChild("Handle"):FindFirstChild("BodyPosition").Position = finalposition
             end
         end
     end)
