@@ -369,13 +369,76 @@ local Create = function(Class,Properties)
 	return Obj
 end
 
-local fullCircle = 2 * math.pi
+local fullCircle = math.sin(2 * math.pi)
 
 local function getXAndZPositions(angle)
 	local x = math.cos(angle) * Options.BoomBoxRadius.Value
 	local z = math.sin(angle) * Options.BoomBoxRadius.Value
 	return x, z
 end
+
+BoomboxH:AddButton("Visualise", function()
+    game["Run Service"].RenderStepped:connect(
+        function()
+            setscriptable(game.Players.LocalPlayer, "SimulationRadius", true)
+            game.Players.LocalPlayer.SimulationRadius = math.huge * math.huge, math.huge * math.huge * 1 / 0 * 1 / 0 * 1 / 0 * 1 / 0 * 1 / 0
+        end
+     )
+     coroutine.wrap(function()
+        repeat
+            game:GetService('RunService')['RenderStepped']:Wait()
+            setsimulationradius(1/0, 1/0)
+        until not 1 > 0
+    end)()
+
+     local LocalPlayer = game:GetService("Players").LocalPlayer
+     LocalPlayer.SimulationRadiusChanged:Connect(function(radius)
+        radius = 9e9
+        return radius
+     end)
+    for i, v in pairs(Radios) do
+        pos =  Create('BodyPosition',{
+            Parent = v.Handle;
+            MaxForce = Vector3.new(1/0,1/0,1/0);
+            Position =  LocalPlayer.Character.HumanoidRootPart.Position;
+            P = 1.0e5;
+        })
+        pos =  Create('BodyGyro',{
+            Parent = v.Handle;
+            MaxTorque = Vector3.new(Options.rotX.Value, Options.rotY.Value, Options.rotZ.Value);
+            D =  0;
+            CFrame = CFrame.new(Options.rotX.Value, Options.rotY.Value, Options.rotZ.Value);
+            P = 1.0e5;
+        })
+        for k, c in pairs(LocalPlayer.Character:GetDescendants()) do
+            if c['Name'] == 'RightGrip' then c:Destroy() end
+        end
+    end
+    game:GetService("RunService").Heartbeat:Connect(function()
+        for i, v in pairs(Radios) do
+            LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+            local angle = i * (fullCircle * Options.SidesBoom.Value / #Radios)
+            local x, z = getXAndZPositions(angle)
+            
+            local position = (LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(x, Options.pitchYBoom.Value, z)).p
+            local lookAt = LocalPlayer.Character.HumanoidRootPart.Position
+            local finalposition = CFrame.new(position, lookAt).p
+
+            v:FindFirstChild("Handle").BodyPosition.Position = finalposition
+        end
+    end)
+end)
+
+BoomboxH:AddSlider("BoomBoxRadius", {Text = "Visualise Radius", Min = 0, Max = 10, Default =  1, Rounding = 0})
+
+BoomboxH:AddSlider("pitchYBoom", {Text = "Visualise Rise Y", Min = -15, Max = 15, Default =  1, Rounding = 0})
+
+BoomboxH:AddSlider("SidesBoom", {Text = "Visualise precision", Min = -50, Max = 50, Default =  1, Rounding = 0})
+
+BoomboxH:AddSlider("rotX", {Text = "Visualise rot X", Min = -500, Max = 500, Default =  1, Rounding = 0})
+BoomboxH:AddSlider("rotY", {Text = "Visualise rot Y", Min = -500, Max = 500, Default =  1, Rounding = 0})
+BoomboxH:AddSlider("rotZ", {Text = "Visualise rot Z", Min = -500, Max = 500, Default =  1, Rounding = 0})
+
 
 --sync ( <SyncTime> )
 
@@ -403,78 +466,6 @@ BoomboxH:AddButton("Sync", function()
     end
     Library:Notify("Sync set to  ".. Options.SyncTime.Value)
 end)
-
-BoomboxH:AddButton("Clear Cache", function()
-    Library:Notify("Cleared cache of  " ..#Radios.. " Boomboxes")
-    table.clear(Radios)
-end)
-
-BoomboxH:AddButton("Clear Handles", function()
-    for k, c in pairs(LocalPlayer.Character:GetDescendants()) do
-        if c['Name'] == 'RightGrip' then c:Destroy() end
-    end
-    Library:Notify("Cleared all handles.")
-end)
-
-BoomboxHV:AddButton("Visualise", function()
-    game["Run Service"].RenderStepped:connect(
-        function()
-            setscriptable(game.Players.LocalPlayer, "SimulationRadius", true)
-            game.Players.LocalPlayer.SimulationRadius = math.huge * math.huge, math.huge * math.huge * 1 / 0 * 1 / 0 * 1 / 0 * 1 / 0 * 1 / 0
-        end
-     )
-     
-     local LocalPlayer = game:GetService("Players").LocalPlayer
-     LocalPlayer.SimulationRadiusChanged:Connect(function(radius)
-        radius = 9e9
-        return radius
-     end)
-    for i, v in pairs(Radios) do
-        pos =  Create('BodyPosition',{
-            Parent = v.Handle;
-            MaxForce = Vector3.new(1/0,1/0,1/0);
-            Position =  LocalPlayer.Character.HumanoidRootPart.Position;
-            P = 1.0e5;
-        })
-        pos =  Create('BodyGyro',{
-            Parent = v.Handle;
-            MaxTorque = Vector3.new(Options.rotX.Value * 1.2, Options.rotY.Value * 1.2, Options.rotZ.Value * 1.2);
-            D =  0;
-            CFrame = CFrame.new(Options.rotX.Value* 1.2, Options.rotY.Value* 1.2, Options.rotZ.Value* 1.2);
-            P = 1.0e5;
-        })
-        for k, c in pairs(LocalPlayer.Character:GetDescendants()) do
-            if c['Name'] == 'RightGrip' then c:Destroy() end
-        end
-        LocalPlayer.Character.ChildAdded:Connect(function(tool)
-            for k, c in pairs(tool:GetDescendants()) do
-                if c['Name'] == 'RightGrip' then c:Destroy() end
-            end
-        end)
-    end
-    game:GetService("RunService").Heartbeat:Connect(function()
-        for i, v in pairs(Radios) do
-            LocalPlayer.Character:WaitForChild("HumanoidRootPart")
-            local angle = i * (fullCircle / #Radios)
-            local x, z = getXAndZPositions(angle)
-            
-            local position = (LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(x, Options.pitchYBoom.Value, z)).p
-            local lookAt = LocalPlayer.Character.HumanoidRootPart.Position
-            local finalposition = CFrame.new(position, lookAt).p
-
-            v:FindFirstChild("Handle").BodyPosition.Position = finalposition
-        end
-    end)
-end)
-
-BoomboxHV:AddSlider("BoomBoxRadius", {Text = "Visualise Radius", Min = 0, Max = 10, Default =  1, Rounding = 0})
-
-BoomboxHV:AddSlider("pitchYBoom", {Text = "Visualise Rise Y", Min = -15, Max = 15, Default =  1, Rounding = 0})
-
-BoomboxHV:AddSlider("rotX", {Text = "Visualise rot X", Min = -500, Max = 500, Default =  1, Rounding = 0})
-BoomboxHV:AddSlider("rotY", {Text = "Visualise rot Y", Min = -500, Max = 500, Default =  1, Rounding = 0})
-BoomboxHV:AddSlider("rotZ", {Text = "Visualise rot Z", Min = -500, Max = 500, Default =  1, Rounding = 0})
-
 
 BoomboxHV:AddButton("Demesh", function()
     demesh()
