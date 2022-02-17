@@ -204,6 +204,18 @@ function isPartVisible(Part, PartDescendant)
     return false
 end
 
+function cardinal(dir)
+	local angle = math.atan2(dir.X, -dir.Z)
+	local quarterTurn = math.pi / 2
+	angle = -math.round(angle / quarterTurn) * quarterTurn
+	
+	local newX = -math.sin(angle)
+	local newZ = -math.cos(angle)
+	if math.abs(newX) <= 1e-10 then newX = 0 end
+	if math.abs(newZ) <= 1e-10 then newZ = 0 end
+	return Vector3.new(newX, 0, newZ)
+end
+
 local function getClosestPlayer()
     if not Options.TargetPart.Value then
         return
@@ -225,6 +237,7 @@ local function getClosestPlayer()
         if Toggles.VisCheck.Value and not isPartVisible(Character[Options.TargetPart.Value], Character) then
             continue
         end
+
 
         if Toggles.CalculateThreat.Value and CalculateThreat3D(Character) --[[and not isThreat(Player)]] then
             continue
@@ -676,6 +689,9 @@ MainOffsets:AddSlider("offsetX", {Text = "Offset X", Min = -15, Max = 15 , Defau
 MainOffsets:AddSlider("offsetY", {Text = "Offset Y", Min = -15, Max = 15, Default = 0, Rounding = 1})
 MainOffsets:AddSlider("offsetZ", {Text = "Offset Z", Min = -15, Max = 15, Default = 0, Rounding = 1})
 
+MainOffsets:AddToggle("cardinal", {Text = "Cardinal Movement"})
+MainOffsets:AddSlider("cardinalOf", {Text = "Offset Cardinal", Min = -3, Max = 3, Default = 2, Rounding = 1})
+
 
 Main:AddToggle("aim_Enabled", {Text = "Enabled", config['SilentAimEnabled'] or false})
 MainChecks:AddToggle("VisCheck", {Text = "Visible Check"})
@@ -820,12 +836,17 @@ elseif Method == "FindPartOnRayWithWhitelist" and Options.Method.Value == Method
         local HitPart = getClosestPlayer()
         if HitPart then
             local Origin = A_Ray.Origin
+            if Toggles.cardinal.Value then
+                offsetmovent = cardinal(HitPart.Parent.Humanoid.MoveDirection * 2)
+            else
+                offsetmovent = Vector3.new(0,0,0)
+            end
             local Direction = getDirection(Origin, HitPart.Position + Vector3.new(math.random(-.2, .3) + Options.offsetX.Value,math.random(-.2, .2) + Options.offsetY.Value, Options.offsetZ.Value))
             Arguments[2] = Ray.new(Origin, Direction)
             lasthittick = tick()
             spawn(function()
                 if Toggles.debugTracers.Value then
-                    local beam = createBeam(Origin, HitPart.Position + Vector3.new(math.random(-.2, .3) + Options.offsetX.Value,math.random(-.2, .2) + Options.offsetY.Value, Options.offsetZ.Value))
+                    local beam = createBeam(Origin, HitPart.Position + Vector3.new(math.random(-.2, .3) + Options.offsetX.Value,math.random(-.2, .2) + Options.offsetY.Value, Options.offsetZ.Value) + offsetmovent)
                     for i = 1, 60 * tonumber(Options.debugTracersFade.Value) do
                         rs:Wait()
                         beam.Transparency = i / (60 * 3)
