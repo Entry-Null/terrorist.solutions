@@ -354,7 +354,7 @@ function demesh()
         if string.find(tool.Name:lower(), 'boombox') and tool:IsA("Tool") then
             for i, v in pairs(tool:GetDescendants()) do
                 if v:IsA("Mesh") or v:IsA("SpecialMesh") then
-                    v:Destroy
+                    v:Destroy()
                 end
             end
         end
