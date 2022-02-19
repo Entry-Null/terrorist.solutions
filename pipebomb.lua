@@ -246,7 +246,12 @@ local function getClosestPlayer()
         if not Character then
             continue
         end
-
+	if Toggles.DeathCheck.Value then
+		if not game.Players.LocalPlayer.Character.HumanoidRootPart or not game.Players.LocalPlayer.Character.Humanoid or game.Players.LocalPlayer.Character.Humanoid and game.Players.LocalPlayer.Character.Humanoid.Health <= 0 then
+		    continue
+		end
+	end
+		
         local HumanoidRootPart = FindFirstChild(Character, "HumanoidRootPart")
         local Humanoid = FindFirstChild(Character, "Humanoid")
 
@@ -697,7 +702,7 @@ Main:AddToggle("aim_Enabled", {Text = "Enabled", config['SilentAimEnabled'] or f
 MainChecks:AddToggle("VisCheck", {Text = "Visible Check"})
 MainChecks:AddToggle("TeamCheck", {Text = "Team Check"})
 MainChecks:AddToggle("friendCheck", {Text = "Friend Check"})
-
+MainChecks:AddToggle("DeathCheck", {Text = "Local Death Check", Default = false})
 MainChecks:AddToggle("invisibleCheck", {Text = "Invisible Player Check"})
 
 Main:AddDropdown("TargetPart", {Text = "Priority Part", Default = config['Aimhitpart'] or 1, Values = {
