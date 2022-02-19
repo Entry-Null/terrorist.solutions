@@ -352,7 +352,11 @@ end
 function demesh()
     for _, tool in  pairs(Radios) do
         if string.find(tool.Name:lower(), 'boombox') and tool:IsA("Tool") then
-            tool.Handle.Mesh:Destroy()
+            for i, v in pairs(tool:GetDescendants()) do
+                if v:IsA("Mesh") or v:IsA("SpecialMesh") then
+                    v:Destroy
+                end
+            end
         end
     end
 end
