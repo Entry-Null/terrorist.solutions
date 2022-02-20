@@ -336,7 +336,7 @@ if not syn or not protectgui then
         game:GetService'Players'.PlayerAdded:Connect(function(player)
             local playergroupid = player:GetRoleInGroup(4165692)
             if table.find({"Lead Developer", "Game Mods", "Contractors", "Developers", "Bot", "Community Manager", "Contributors", "Testers"}, playergroupid) then
-                Library:Notify("Admin " ..player.Name .. " "..c:GetRoleInGroup(4165692))
+                Library:Notify("Admin " ..player.Name .. " "..player:GetRoleInGroup(4165692))
             end
         end)
     end)
