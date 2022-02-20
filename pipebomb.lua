@@ -294,9 +294,31 @@ local VisualBOX2 = VisualTab:AddRightTabbox("Menu Config")
 local VisualEsp = VisualBOX:AddTab("Main")
 local MenuVisual = VisualBOX2:AddTab("Menu Config")
 
+
 local AATab = Window:AddTab("Anti Aim")
 local AABOX = AATab:AddLeftTabbox("Advanced Config")
 local ADABOX = AATab:AddRightTabbox("Advanced Config")
+
+
+local CrimTab = Window:AddTab("Crim")
+local CrimLt = AATab:AddLeftTabbox("Anti Ban")
+
+local crim = CrimLt:AddTab("Anti Admin")
+
+crim:AddButton("Admin Notification", function ()
+    for i ,c in pairs(game.Players:GetChildren()) do
+        local playergroupid = c:GetRoleInGroup(4165692)
+        if table.find({"Lead Developer", "Game Mods", "Contractors", "Developers", "Bot", "Community Manager", "Contributors", "Testers"}, playergroupid) then
+            Library:Notify("Admin " ..c.Name .. " "..c:GetRoleInGroup(4165692))
+        end
+    end
+    game:GetService'Players'.PlayerAdded:Connect(function(player)
+        local playergroupid = player:GetRoleInGroup(4165692)
+        if table.find({"Lead Developer", "Game Mods", "Contractors", "Developers", "Bot", "Community Manager", "Contributors", "Testers"}, playergroupid) then
+            Library:Notify("Admin " ..player.Name .. " "..c:GetRoleInGroup(4165692))
+        end
+    end)
+end)
 
 local SexTab = Window:AddTab("Sex")
 
