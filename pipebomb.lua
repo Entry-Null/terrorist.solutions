@@ -350,7 +350,7 @@ Crim:AddButton("Crim Admin Notification", function ()
 end)
 
 Crim:AddButton("Enable Chat", function ()
-    
+
     local chatFrame = player.PlayerGui.Chat.Frame
     chatFrame.ChatChannelParentFrame.Visible = true
     chatFrame.ChatBarParentFrame.Position = chatFrame.ChatChannelParentFrame.Position+UDim2.new(UDim.new(),chatFrame.ChatChannelParentFrame.Size.Y)
