@@ -294,10 +294,11 @@ local VisualBOX2 = VisualTab:AddRightTabbox("Menu Config")
 local VisualEsp = VisualBOX:AddTab("Main")
 local MenuVisual = VisualBOX2:AddTab("Menu Config")
 
-Library.KeybindFrame.Visible = true
+
 MenuVisual:AddToggle('Keybinds', { Text = 'Show Keybinds Menu', Default = false }):OnChanged(function()
     Library.KeybindFrame.Visible = Toggles.Keybinds.Value;
 end);
+Library.KeybindFrame.Visible = true
 MenuVisual:AddToggle('Watermark', { Text = 'Show Watermark', Default = false }):OnChanged(function()
     Library:SetWatermarkVisibility(Toggles.Watermark.Value);
 end);
