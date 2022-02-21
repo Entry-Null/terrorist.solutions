@@ -351,7 +351,7 @@ end)
 
 Crim:AddButton("Enable Chat", function ()
 
-    local chatFrame = player.PlayerGui.Chat.Frame
+    local chatFrame = game.Players.LocalPlayer.PlayerGui.Chat.Frame
     chatFrame.ChatChannelParentFrame.Visible = true
     chatFrame.ChatBarParentFrame.Position = chatFrame.ChatChannelParentFrame.Position+UDim2.new(UDim.new(),chatFrame.ChatChannelParentFrame.Size.Y)
 
