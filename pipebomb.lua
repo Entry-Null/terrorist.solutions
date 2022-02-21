@@ -349,6 +349,14 @@ Crim:AddButton("Crim Admin Notification", function ()
     end)
 end)
 
+Crim:AddButton("Enable Chat", function ()
+    
+    local chatFrame = player.PlayerGui.Chat.Frame
+    chatFrame.ChatChannelParentFrame.Visible = true
+    chatFrame.ChatBarParentFrame.Position = chatFrame.ChatChannelParentFrame.Position+UDim2.new(UDim.new(),chatFrame.ChatChannelParentFrame.Size.Y)
+
+end)
+
 function realChat(wordstosay)
     game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(wordstosay, "All")
 end
@@ -705,7 +713,7 @@ ESP.Color = Color3.fromRGB(222, 33, 52); -- Red
 
 VisualEsp:AddToggle("VisualEnabled", {Text = "Enabled", Default = config['VisualsEnabled'] or false}):OnChanged(function()
     if Toggles.VisualEnabled.Value then
-        ESP.Enabled = Options.visualkeybind.Toggled
+        ESP.Enabled = Toggles.VisualEnabled.Value
     end
  end)
 
