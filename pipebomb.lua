@@ -376,7 +376,7 @@ function MiddleMouseLoop()
     UIS.InputBegan:Connect(function(key)
         if Options.MMT.Toggled then
             if key.UserInputType == Enum.UserInputType.MouseButton3 then
-                char:WaitForChild("HumanoidRootPart").CFrame = char:WaitForChild("HumanoidRootPart").CFrame + (char.:WaitForChild("HumanoidRootPart").CFrame.LookVector * 60/6)
+                char:WaitForChild("HumanoidRootPart").CFrame = char:WaitForChild("HumanoidRootPart").CFrame + (char:WaitForChild("HumanoidRootPart").CFrame.LookVector * 60/6)
             end
         end
     end)
