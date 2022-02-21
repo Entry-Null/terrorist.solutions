@@ -352,7 +352,13 @@ function realChat(wordstosay)
     game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(wordstosay, "All")
 end
 local trashtalktbl = {"rip bozo 🔥💯 rip bozo 🔥💯 rip bozo 🔥💯", "".. game.Players.LocalPlayer.Name .. " on top during mother visits", "aim like washing machine", "teeth are doing the cupid shuffle", "folded like a commercial grade lawn chair", "trashbin", "cope", "seethe", "vouch", "get 1984'd", "get mlk'd", "get jfk'd", "obtain realism", "get real", "dnc (do not care)", "toilet roll for a neck", "dirty dyslexic monkey"}
-Crim:AddLabel("Trash Talk Keybind"):AddKeyPicker('trashtalkheld', { Text = 'Trash Talk', Default = 'h'});
+
+
+    Crim:AddLabel("Trash Talk Keybind"):AddKeyPicker('trashtalkheld', { Text = 'Trash Talk', Default = 'h'});
+
+    Crim:AddDropdown("trashTalkMode", {Text = "Keybinding Mode", Default = 1, Values = {"Toggle", "Held", "Always"}}):OnChanged(function()
+        Options.trashtalkheld.Mode = Options.trashTalkMode.Value
+    end)
 
 db = false
 
