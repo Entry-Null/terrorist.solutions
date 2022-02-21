@@ -367,6 +367,24 @@ local trashtalktbl = {"grandma got kicked out of a lyric lemonade video ", "Supe
 
 
 db = false
+Crim:AddLabel("Middle Mouse Teleport"):AddKeyPicker('MMT', { Text = 'Teleport', Default = 'F10'});
+
+function MiddleMouseLoop()
+    local UIS = game:GetService("UserInputService")
+    local char = game.Players.LocalPlayer:WaitForChild("Character")
+
+    UIS.InputBegan:Connect(function(key)
+        if Options.MMT.Toggled then
+            if key.UserInputType == Enum.UserInputType.MouseButton3 then
+                char:WaitForChild("HumanoidRootPart").CFrame = char:WaitForChild("HumanoidRootPart").CFrame + (char.:WaitForChild("HumanoidRootPart").CFrame.LookVector * 60/6)
+            end
+        end
+    end)
+end
+
+coroutine.wrap(MiddleMouseLoop)()
+
+
 
 function trashtalkloop()
     while wait() do
