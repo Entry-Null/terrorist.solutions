@@ -351,7 +351,7 @@ end)
 
 Crim:AddButton("Enable Chat", function ()
 
-    local chatFrame = player.PlayerGui.Chat.Frame
+    local chatFrame = game.LocalPlayer.PlayerGui.Chat.Frame
     chatFrame.ChatChannelParentFrame.Visible = true
     chatFrame.ChatBarParentFrame.Position = chatFrame.ChatChannelParentFrame.Position+UDim2.new(UDim.new(),chatFrame.ChatChannelParentFrame.Size.Y)
 
@@ -376,7 +376,7 @@ function MiddleMouseLoop()
     UIS.InputBegan:Connect(function(key)
         if Options.MMT.Toggled then
             if key.UserInputType == Enum.UserInputType.MouseButton3 then
-                char:WaitForChild("HumanoidRootPart").CFrame = char:WaitForChild("HumanoidRootPart").CFrame + (char:WaitForChild("HumanoidRootPart").CFrame.LookVector * 60/6)
+                char:WaitForChild("HumanoidRootPart").CFrame = char:WaitForChild("HumanoidRootPart").CFrame + (char.:WaitForChild("HumanoidRootPart").CFrame.LookVector * 60/6)
             end
         end
     end)
