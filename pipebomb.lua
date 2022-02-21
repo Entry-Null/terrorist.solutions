@@ -294,7 +294,7 @@ local VisualBOX2 = VisualTab:AddRightTabbox("Menu Config")
 local VisualEsp = VisualBOX:AddTab("Main")
 local MenuVisual = VisualBOX2:AddTab("Menu Config")
 
-
+Library.KeybindFrame.Visible = true
 MenuVisual:AddToggle('Keybinds', { Text = 'Show Keybinds Menu', Default = false }):OnChanged(function()
     Library.KeybindFrame.Visible = Toggles.Keybinds.Value;
 end);
@@ -351,14 +351,11 @@ end)
 function realChat(wordstosay)
     game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(wordstosay, "All")
 end
-local trashtalktbl = {"rip bozo 🔥💯 rip bozo 🔥💯 rip bozo 🔥💯", "".. game.Players.LocalPlayer.Name .. " on top during mother visits", "aim like washing machine", "teeth are doing the cupid shuffle", "folded like a commercial grade lawn chair", "trashbin", "cope", "seethe", "vouch", "get 1984'd", "get mlk'd", "get jfk'd", "obtain realism", "get real", "dnc (do not care)", "toilet roll for a neck", "dirty dyslexic monkey"}
+local trashtalktbl = {"grandma got kicked out of a lyric lemonade video ", "Super Mario Fan", "Pillow Pet collector",  "Pillow Pet Aim","Aim like a mobile player", "Move like a console player", "Denis Daily Fan Aim", "Calculator Collector" , "yo grandma 360 noscoped Ninja and Tfue ina  fortnite prelobby match on accident, and he banned her account for allegid stream sniping1", "yo mom got a bottle of dioxyribo nucleic acid, sitting on the top of her chimney, it spawns satan", "yo fish ate yo alligator and transformed into a BeyBlade, because little did you know, that was nemo from finding nemo", "real life version of Kirby" ,"caught drinkin water out of a lake in minecraft","rip bozo 🔥💯 rip bozo 🔥💯 rip bozo 🔥💯", "".. game.Players.LocalPlayer.Name .. " on top during mother visits", "aim like washing machine", "teeth are doing the cupid shuffle", "folded like a commercial grade lawn chair", "trashbin", "cope", "seethe", "vouch", "get 1984'd", "get mlk'd", "get jfk'd", "yo granddad is an experienced agar.io player and he solotricked the president", "yo long lost pet jaguar was found in west virginia eating rat soup in a pawn shop", "Aye the first time you rode a skateboard you started twisting yo spine back and forth thinking you was accelerating ", "obtain realism", "get real", "dnc (do not care)", "toilet roll for a neck", "dirty dyslexic monkey"}
 
 
-    Crim:AddLabel("Trash Talk Keybind"):AddKeyPicker('trashtalkheld', { Text = 'Trash Talk', Default = 'h'});
+    Crim:AddLabel("Trash Talk Keybind"):AddKeyPicker('trashtalkheld', { Text = 'Trash Talk', Default = 'F8'});
 
-    Crim:AddDropdown("trashTalkMode", {Text = "Keybinding Mode", Default = 1, Values = {"Toggle", "Held", "Always"}}):OnChanged(function()
-        Options.trashtalkheld.Mode = Options.trashTalkMode.Value
-    end)
 
 db = false
 
@@ -705,11 +702,9 @@ local ADAntiAim = ADABOX:AddTab("Advanced Config")
 ]]
 ESP.Color = Color3.fromRGB(222, 33, 52); -- Red
 
-VisualEsp:AddToggle("VisualEnabled", {Text = "Enabled", Default = config['VisualsEnabled'] or false}):AddColorPicker("VisualColor", {Default = Color3.fromRGB(222, 33, 52)}):OnChanged(function()
-    ESP.Enabled = Toggles.VisualEnabled.Value
-    while Options.VisualEnabled do
-        ESP.Color = Options.VisualColor.Value
-        task.wait()
+VisualEsp:AddToggle("VisualEnabled", {Text = "Enabled", Default = config['VisualsEnabled'] or false}):OnChanged(function()
+    if Toggles.VisualEnabled.Value then
+        ESP.Enabled = Options.visualkeybind.Toggled
     end
  end)
 
@@ -720,8 +715,12 @@ ESP:Toggle(true)
  end)
 
 
-VisualEsp:AddToggle("Boxes", {Text = "Boxes", Default = config['espBoxes'] or false}):OnChanged(function()
-    ESP.Boxes = Toggles.Boxes.Value 
+VisualEsp:AddToggle("Boxes", {Text = "Boxes", Default = config['espBoxes'] or false}):AddKeyPicker('visualkeybind', { Text = 'Visuals', Default = 'F6'}):OnChanged(function()
+    if not Toggles.Boxes.Value and Options.visualkeybind.Toggled then
+        ESP.Boxes = Options.visualkeybind.Toggled
+    elseif Toggles.Boxes.Value then
+        ESP.Boxes = Toggles.Boxes.Value
+    end
  end)
 
 VisualEsp:AddSlider("Thickness", {Text = "Thickness", Min = 0, Max = 10, Default = 1, Rounding = 1}):OnChanged(function()
@@ -774,7 +773,7 @@ MainOffsets:AddToggle("cardinal", {Text = "Cardinal Movement"})
 MainOffsets:AddSlider("cardinalOf", {Text = "Offset Cardinal", Min = -3, Max = 3, Default = 2, Rounding = 1})
 
 
-Main:AddToggle("aim_Enabled", {Text = "Enabled", config['SilentAimEnabled'] or false})
+Main:AddToggle("aim_Enabled", {Text = "Enabled", config['SilentAimEnabled'] or false}):AddKeyPicker('silentAimKey', { Text = 'SilentAim', Default = 'F7'});
 MainChecks:AddToggle("VisCheck", {Text = "Visible Check"})
 MainChecks:AddToggle("TeamCheck", {Text = "Team Check"})
 MainChecks:AddToggle("friendCheck", {Text = "Friend Check"})
@@ -886,7 +885,7 @@ local Method = getnamecallmethod()
 local Arguments = {...}
 local self = Arguments[1]
 
-if Toggles.aim_Enabled.Value and self == workspace then
+if Toggles.aim_Enabled.Value or Options.silentAimKey.Toggled and self == workspace  then
 if Method == "FindPartOnRayWithIgnoreList" and Options.Method.Value == Method then
     if ValidateArguments(Arguments, ExpectedArguments.FindPartOnRayWithIgnoreList) then
         local A_Ray = Arguments[2]
