@@ -338,13 +338,13 @@ Crim:AddButton("Crim Admin Notification", function ()
     for i ,c in pairs(game.Players:GetChildren()) do
         local playergroupid = c:GetRoleInGroup(4165692)
         if table.find({"Lead Developer", "Game Mods", "Contractors", "Developers", "Bot", "Community Manager", "Contributors", "Testers"}, playergroupid) then
-            Library:Notify("Admin " ..c.Name .. " "..c:GetRoleInGroup(4165692), 10)
+            Library:Notify("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Admin " ..c.Name .. " "..c:GetRoleInGroup(4165692), 20)
         end
     end
     game:GetService'Players'.PlayerAdded:Connect(function(player)
         local playergroupid = player:GetRoleInGroup(4165692)
         if table.find({"Lead Developer", "Game Mods", "Contractors", "Developers", "Bot", "Community Manager", "Contributors", "Testers"}, playergroupid) then
-            Library:Notify("Admin " ..player.Name .. " "..player:GetRoleInGroup(4165692), 10)
+            Library:Notify("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Admin " ..player.Name .. " "..player:GetRoleInGroup(4165692), 20)
         end
     end)
 end)
