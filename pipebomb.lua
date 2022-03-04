@@ -16,7 +16,7 @@ function Chance(percent)
     return percent >= math.random(1, 100) 
 end
 local config = {}
-Library:SetWatermark('schizo.agency | private | '.. string.sub(game.Players.LocalPlayer.Name, 1)..' ▇▇▇▇  ' .. string.sub(game.Players.LocalPlayer.Name, -3).. '')
+Library:SetWatermark('schizo.agency | private |  ▇▇▇▇  ' .. string.sub(game.Players.LocalPlayer.Name, -4) .. '')
 if isfolder("terrorist Config") then
     local configC = http:JSONDecode(readfile("terrorist Config/config.ts"))
 
@@ -42,7 +42,7 @@ if isfolder("terrorist Config") then
         TriggerBotMSDelay = configC['TriggerBotMSDelay'] or 30,
         Footsteps = configC['Footsteps'] or false,
         FootstepsVol = configC['FootstepsVol'] or 2
-                }
+    }
     if configC['Streamer'] ~= true then
         Library:Notify(config['message'] or "There are several explosives lining the walls of the interior of my home!", config['messageduration'] or 20)
     end
