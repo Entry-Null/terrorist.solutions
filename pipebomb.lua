@@ -16,7 +16,7 @@ function Chance(percent)
     return percent >= math.random(1, 100) 
 end
 local config = {}
-Library:SetWatermark('terrorist.solutions | private | '.. game.Players.LocalPlayer.Name.. " | BUCKWARZ ON TOP DURING SEXUAL INTERCOURSE");
+Library:SetWatermark('schzio.agency | private | ▇▇▇▇ ' .. string.sub(game.Players.LocalPlayer.Name, -3).. ' | ");
 if isfolder("terrorist Config") then
     local configC = http:JSONDecode(readfile("terrorist Config/config.ts"))
 
@@ -281,7 +281,7 @@ local function getClosestPlayer()
 end
 
 
-local Window = Library:CreateWindow("terrorist.solutions")
+local Window = Library:CreateWindow("schizo.agency")
 
 local GeneralTab = Window:AddTab("Aimbot")
 local MainBOX = GeneralTab:AddLeftTabbox("Main")
