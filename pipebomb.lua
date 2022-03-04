@@ -16,7 +16,7 @@ function Chance(percent)
     return percent >= math.random(1, 100) 
 end
 local config = {}
-Library:SetWatermark('schzio.agency | private | ▇▇▇▇ ' .. string.sub(game.Players.LocalPlayer.Name, -3).. ' | ");
+Library:SetWatermark('schizo.agency | private | '.. string.sub(game.Players.LocalPlayer.Name, 1)..' ▇▇▇▇  ' .. string.sub(game.Players.LocalPlayer.Name, -3).. '')
 if isfolder("terrorist Config") then
     local configC = http:JSONDecode(readfile("terrorist Config/config.ts"))
 
