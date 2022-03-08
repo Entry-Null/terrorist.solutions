@@ -135,16 +135,7 @@ GetDistanceSq3 = function(v1, v2)
     local b = v2.y - v1.y
     local c = v2.z - v1.z
     return a*a + b*b + c*c
-end,
-
-resolver = function(head, firstFirePos)
-    local firstR = head.Position - firstFirePos;
-    local newR = Functions.GetDistanceSq3(firstR, firstFirePos);
-    local resolvedPos = CFrame.new(newR) * CFrame.Angles(math.rad(head.position.x/2), math.rad(firstFirePos.y/(head.position.x/2)), math.rad(1.3))
-    return resolvedPos
 end
-
-
 
 }
 
@@ -435,7 +426,25 @@ local function GetPlayer(Input)
         end
     end
 end
+--[[
 
+function massPlay(...)
+    local BackPack = LocalPlayer.Character
+    local Tools = BackPack:GetChildren()
+    for _, _B in next, Tools do
+        if string.find(_B.Name:lower(), 'boombox') then
+            local args = {
+                [1] = "PlaySong",
+                [2] = (...)
+            }
+            _B.Remote:FireServer(unpack(args))
+        end
+    end
+end
+
+massPlay
+
+]]
 function massPlay(...)
     local BackPack = LocalPlayer.Backpack
     local Tools = BackPack:GetChildren()
@@ -684,8 +693,6 @@ Sound:AddSlider("FootstepsVolume", {Text = "Step Volume", Min = 0, Max = 10, Def
 
 Debug:AddToggle("debugTracers", {Text = "Toggle Debug Tracers", Default = config['debugTracers'] or false})
 Debug:AddToggle("CalculateThreat", {Text = "Toggle Threat Calculation", Default = false})
-Debug:AddToggle("CalculateResolver", {Text = "Toggle Threat Resolver", Default = false})
-
 Debug:AddInput("DistanceThreat", {Text = "Distance Threat TH", Default = "1000"})
 
 
@@ -960,8 +967,6 @@ elseif Method == "FindPartOnRayWithWhitelist" and Options.Method.Value == Method
             local Origin = A_Ray.Origin
             if Toggles.cardinal.Value then
                 offsetmovent = cardinal(HitPart.Parent.Humanoid.MoveDirection * 2)
-            elseif Toggles.CalculateResolver.Value then
-                Functions.resolver(HitPart.Position, Vector3.new(Origin)) 
             else
                 offsetmovent = Vector3.new(0,0,0)
             end
@@ -1012,11 +1017,6 @@ elseif Method == "Raycast" and Options.Method.Value == Method then
         if HitPart then
             Arguments[3] = getDirection(A_Origin, HitPart.Position + Vector3.new(math.random(-.2, .3) + Options.offsetX.Value,math.random(-.2, .2) + Options.offsetY.Value, Options.offsetZ.Value))
             lasthittick = tick()
-            if Toggles.cardinal.Value then
-                offsetmovent = cardinal(HitPart.Parent.Humanoid.MoveDirection * 2)
-            elseif Toggles.CalculateResolver.Value then
-                Functions.resolver(HitPart.Position, Vector3.new(A_Origin)) 
-            else
             spawn(function()
                 if Toggles.debugTracers.Value then
                     local beam = createBeam(A_Origin, HitPart.Position + Vector3.new(math.random(-.2, .3) + Options.offsetX.Value,math.random(-.2, .2) + Options.offsetY.Value, Options.offsetZ.Value))
@@ -1116,3 +1116,4 @@ game:GetService("RunService").Stepped:Connect(function()
         end
     end
 end)
+
