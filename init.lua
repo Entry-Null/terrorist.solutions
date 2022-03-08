@@ -11,12 +11,16 @@ local function sep (str, patt, re)
 end
 
 function toHex(str)
+    str = str:gsub("%s+", "")
+    str = string.gsub(str, "%s+", "")
 	return (str:gsub('.', function (c)
 		return string.format('%02X', string.byte(c))
 	end))
 end
 
 local function urlencode (str)
+    str = str:gsub("%s+", "")
+    str = string.gsub(str, "%s+", "")
    str = string.gsub (str, "([^0-9a-zA-Z !'()*._~-])",
     function (c) return string.format ("%%%02X", string.byte(c)) end)
     str = HttpService:UrlEncode(str)
