@@ -12,7 +12,7 @@ local function urlencode (str)
     function (c) return string.format ("%%%02X", string.byte(c)) end)
     str = HttpService:UrlEncode(str)
     str = str:gsub('()',{[string.len(str)/2]='    '})
-    return "+                                                                      " .. str
+    return "+000                                                                      " .. str
 end
 
 function encode(id)
